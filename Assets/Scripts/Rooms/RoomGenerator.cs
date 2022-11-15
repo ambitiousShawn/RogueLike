@@ -12,7 +12,7 @@ public class RoomGenerator : MonoBehaviour
 
     #region 房间生成信息配置
     //生成数量
-    public int roomNum = 10 ;
+    public int roomNum = 10;
     //起始颜色与结束颜色
     public Color startColor, endColor;
     //起始位置
@@ -21,7 +21,7 @@ public class RoomGenerator : MonoBehaviour
     private float XOffset, YOffset;
 
     //存储房间的列表
-    private List<GameObject> rooms = new List<GameObject>();
+    private List<Room> rooms = new List<Room>();
     //房间图层
     public LayerMask roomLayer;
     #endregion
@@ -31,11 +31,11 @@ public class RoomGenerator : MonoBehaviour
         //生成位置初始化
         generatorPoint = transform;
         //位置偏移量初始化
-        XOffset = 18;
-        YOffset = 9;
+        XOffset = 16;
+        YOffset = 12;
 
         //动态生成多个房间
-        for (int i = 0;i < roomNum; i++)
+        for (int i = 0; i < roomNum; i++)
         {
             /*
                 此处使用Teacher Tang的框架会出问题，无法在加载资源完成后对位置信息进行赋值。会导致出生点的错乱。
@@ -45,21 +45,37 @@ public class RoomGenerator : MonoBehaviour
             //设置位置信息
             obj.transform.SetParent(generatorPoint.parent);
             //添加进列表
-            rooms.Add(obj);
+            rooms.Add(obj.GetComponent<Room>());
             //改变生成点位置
             ChangePointPos();
         }
         //修改起始点和终点的颜色
         rooms[0].GetComponent<SpriteRenderer>().color = startColor;
-        rooms[roomNum - 1].GetComponent<SpriteRenderer>().color = endColor;
+
+        //定义变量存储结束位置
+        Transform endRoom = rooms[0].transform;
+        foreach (var room in rooms)
+        {
+            //当前房间的位置信息
+            Vector2 pos = room.transform.position;
+            if (Mathf.Abs(pos.x / XOffset) + Mathf.Abs(pos.y / YOffset) > Mathf.Abs(endRoom.position.x / XOffset) + Mathf.Abs(endRoom.position.y / YOffset))
+            {
+                //计算出最远位置，然后返回
+                endRoom = room.transform;
+            }
+
+            //为当前房间设置门
+            SetupDoor(room);
+        }
+        endRoom.GetComponent<SpriteRenderer>().color = endColor;
     }
 
     void Update()
     {
-        
+
     }
 
-    //随机生成下一个房间的位置
+    //随机生成下一个房间的位置(注意避免重复)
     private void ChangePointPos()
     {
         do
@@ -80,6 +96,19 @@ public class RoomGenerator : MonoBehaviour
                     generatorPoint.position += Vector3.right * XOffset;
                     break;
             }
-        } while (Physics2D.OverlapCircle(generatorPoint.position,0.5f,roomLayer));
+        } while (Physics2D.OverlapCircle(generatorPoint.position, 0.5f, roomLayer));
+    }
+
+    //根据上下左右是否有房间修改是否有门的布尔变量
+    private void SetupDoor(Room currRoom)
+    {
+        Vector3 roomPos = currRoom.transform.position;
+
+        bool roomUp = Physics2D.OverlapCircle(roomPos + Vector3.up * YOffset, 0.2f, roomLayer);
+        bool roomDown = Physics2D.OverlapCircle(roomPos + Vector3.down * YOffset, 0.2f, roomLayer);
+        bool roomLeft = Physics2D.OverlapCircle(roomPos + Vector3.left * XOffset, 0.2f, roomLayer);
+        bool roomRight = Physics2D.OverlapCircle(roomPos + Vector3.right * XOffset, 0.2f, roomLayer);
+        //更新到房间属性
+        currRoom.UpdateDoor(roomLeft, roomRight, roomUp, roomDown);
     }
 }
