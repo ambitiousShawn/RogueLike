@@ -18,7 +18,7 @@ public class RoomGenerator : MonoBehaviour
     //起始位置
     private Transform generatorPoint;
     //每个房间的位置偏移
-    private float XOffset, YOffset;
+    public float XOffset, YOffset;
 
     //存储房间的列表
     private List<Room> rooms = new List<Room>();
@@ -50,7 +50,12 @@ public class RoomGenerator : MonoBehaviour
             ChangePointPos();
         }
         //修改起始点和终点的颜色
-        rooms[0].GetComponent<SpriteRenderer>().color = startColor;
+        //rooms[0].GetComponent<SpriteRenderer>().color = startColor;
+        SpriteRenderer[] sr = rooms[0].GetComponentsInChildren<SpriteRenderer>();
+        foreach (var s in sr)
+            if (!s.tag.StartsWith ("Door_"))
+                s.color = startColor;
+        
 
         //定义变量存储结束位置
         Transform endRoom = rooms[0].transform;
@@ -67,7 +72,11 @@ public class RoomGenerator : MonoBehaviour
             //为当前房间设置门
             SetupDoor(room);
         }
-        endRoom.GetComponent<SpriteRenderer>().color = endColor;
+        //endRoom.GetComponent<SpriteRenderer>().color = endColor;
+        sr = endRoom.GetComponentsInChildren<SpriteRenderer>();
+        foreach (var s in sr)
+            if (!s.tag.StartsWith("Door_"))
+                s.color = endColor;
     }
 
     void Update()
