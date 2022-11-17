@@ -20,7 +20,8 @@ public class InputManager : Singleton<InputManager>
 
         //¼üÅÌÊäÈë¼ì²â
         CheckKey(KeyCode.M);
-        
+        CheckKey(KeyCode.J);
+        CheckKey(KeyCode.K);
     }
 
     //¼üÅÌÏà¹Ø

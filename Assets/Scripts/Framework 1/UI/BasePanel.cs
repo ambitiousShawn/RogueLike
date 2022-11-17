@@ -40,7 +40,11 @@ public abstract class BasePanel : MonoBehaviour
         //获取控制透明度的组件
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
+        {
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            canvasGroup.alpha = 1;
+        }
+            
     }
 
     protected virtual void Start()
