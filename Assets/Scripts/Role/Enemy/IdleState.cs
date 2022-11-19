@@ -256,6 +256,9 @@ public class HitState : IState
     private FSM manager;
     private Parameter parameter;
 
+    //动画的播放进度
+    private AnimatorStateInfo info;
+
     public HitState(FSM manager)
     {
         this.manager = manager;
@@ -265,24 +268,32 @@ public class HitState : IState
     public void OnEnter()
     {
         parameter.anim.Play("Hit");
-        parameter.health--;
+        //进入受伤状态时，身体变红
+        parameter.shader.color = Color.red;
     }
 
     public void OnExit()
     {
         parameter.getHit = false;
+        //结束受伤状态时，身体颜色恢复
+        parameter.shader.color = Color.white ;
     }
 
     public void OnUpdate()
     {
+        info = parameter.anim.GetCurrentAnimatorStateInfo(0);
+
         if (parameter.health <= 0)
         {
             manager.TransitionState(StateType.Death);
         }
         else
         {
-            parameter.player = GameObject.FindWithTag("Player").transform;
-            manager.TransitionState(StateType.Chase);
+            if (info.normalizedTime >= 0.95f)
+            {
+                parameter.player = GameObject.FindWithTag("Player").transform;
+                manager.TransitionState(StateType.Chase);
+            }
         }
     }
 }
@@ -319,4 +330,5 @@ public class DeathState : IState
         
     }
 }
+
 

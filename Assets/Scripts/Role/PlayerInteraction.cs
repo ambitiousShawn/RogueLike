@@ -10,16 +10,25 @@ public class PlayerInteraction : MonoBehaviour
     private Animator anim;
     //蓄力UI
     private GamePanel gamePanel;
+    //开火点坐标
+    private Transform firePoint;
 
-    #region 角色数值
+
+    #region 角色数值(读表赋值)
     //攻击冷却
-    public float atkCD = 0.8f;
+    public float atkCD = 0.4f;
     private float currCD;
 
     //重击蓄力时长
     public float HitTimer = 1;
     private float currTimer = 0;
     private bool Jtrigger = false;
+
+    //近战轻击范围
+    private Transform atk1Point;
+    private float atk1Range;
+    //近战重击范围
+    private float atk2Range;
     #endregion
 
     private void Awake()
@@ -42,6 +51,19 @@ public class PlayerInteraction : MonoBehaviour
         YOffset = 12;
         
         currCD = atkCD;
+
+        //找到开火点
+        firePoint = transform.Find("firePoint");
+        Init();
+    }
+
+    //读表给角色赋值
+    void Init()
+    {
+        atk1Point = transform.Find("Atk1Range");
+        //Test:读表
+        atk1Range = 0.5f;
+        atk2Range = 0.7f;
     }
 
     void Update()
@@ -115,11 +137,12 @@ public class PlayerInteraction : MonoBehaviour
     #region 触发器相关
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //拿到当前房间坐标
-        Vector3 currRoom = collision.transform.parent.position;
-        if (collision.tag.StartsWith("Door_"))
+        print(GameManager.Instance.isSucceed);
+        if (collision.tag.StartsWith("Door_") && GameManager.Instance.isSucceed)
         {
-
+            
+            //拿到当前房间坐标
+            Vector3 currRoom = collision.transform.parent.position;
             //获得房间偏移量
             if (collision.tag == "Door_right")
             {
@@ -147,4 +170,62 @@ public class PlayerInteraction : MonoBehaviour
     }
     #endregion
 
+
+    #region 动画事件
+    public void Fire()
+    {
+        //开火时创建出子弹(后续改为读表数据)
+        /*ResourcesManager.Instance.LoadAsync<GameObject>("Fire/火焰子弹",(obj) => 
+        {
+            //创建出来设置位置，旋转以及父物体
+            obj.transform.position = firePoint.position;
+            obj.transform.rotation = Quaternion.identity;
+        });*/
+
+        PoolManager.Instance.GetElement("Fire/火焰子弹", firePoint);
+    }
+
+    public void Atk1()
+    {
+        //播放近战轻击动画时，检测范围内是否存在敌人标签，存在则调用敌人受伤逻辑
+        Collider2D[] coll = Physics2D.OverlapCircleAll(atk1Point.position, atk1Range, 1 << LayerMask.NameToLayer("Enemy"));
+
+        foreach (Collider2D c in coll)
+        {
+            //Bug记录：怪物身上有两个碰撞器，需要排除不是触发器的那个，此外，子类也存在触发器，将子类图层改为非Enemy即可解决。
+            if (c.isTrigger)
+            {
+                //转换敌人的受伤状态
+                FSM fsm = c.GetComponent<FSM>();
+                fsm.parameter.getHit = true;
+                //Test:伤害值后期读表
+                fsm.Hit(2);
+            }
+        }
+    }
+
+    public void Atk2()
+    {
+        Collider2D[] coll = Physics2D.OverlapCircleAll(atk1Point.position, atk2Range, 1 << LayerMask.NameToLayer("Enemy"));
+
+        foreach (Collider2D c in coll)
+        {
+            //Bug记录：怪物身上有两个碰撞器，需要排除不是触发器的那个，此外，子类也存在触发器，将子类图层改为非Enemy即可解决。
+            if (c.isTrigger)
+            {
+                //转换敌人的受伤状态
+                FSM fsm = c.GetComponent<FSM>();
+                fsm.parameter.getHit = true;
+                //Test:伤害值后期读表
+                fsm.Hit(5);
+            }
+        }
+    }
+    #endregion
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(atk1Point.position, atk1Range);
+    }
 }

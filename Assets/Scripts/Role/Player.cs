@@ -33,14 +33,13 @@ public class Player : MonoBehaviour
         anim.SetFloat("speed", new Vector2(x, y).magnitude);
 
         //×ªÏò
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (x < 0)
         {
-            sr.flipX = true;
+            transform.localScale = new Vector3(-1.5f, 1.5f, 1.5f);
         }
         else if (x > 0)
         {
-            sr.flipX = false;
+            transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         }
     }
 }

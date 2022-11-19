@@ -33,6 +33,8 @@ public class Parameter
 
     //敌人是否被攻击
     public bool getHit;
+    //敌人的着色器组件(受击身体变红)
+    public SpriteRenderer shader;
 }
 
 
@@ -62,12 +64,6 @@ public class FSM : MonoBehaviour
     void Update()
     {
         currState.OnUpdate();
-
-        //TEST:模拟受伤
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            parameter.getHit = true;
-        }
     }
 
     //转移状态逻辑
@@ -94,6 +90,13 @@ public class FSM : MonoBehaviour
             else if (transform.position.x < target.position.x)
                 transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         }
+    }
+
+    //敌人受伤逻辑(给玩家调用)
+    public void Hit(int damage)
+    {
+        parameter.health -= damage;
+        print("当前怪物剩余血量 " + parameter.health);
     }
 
     #region 触发器
