@@ -21,7 +21,7 @@ public class PoolManager : Singleton<PoolManager>
     private GameObject inactivePool;
 
     //从缓存池取
-    public GameObject GetElement(string name,Transform initTrans = null)
+    public GameObject GetElement(string name,Transform initTrans = null,float delayTime = 99f)
     {
         //设置层级
         if (basePool == null)
@@ -52,6 +52,8 @@ public class PoolManager : Singleton<PoolManager>
         res.transform.parent = activePool.transform;
         if (initTrans != null)
             res.transform.position = initTrans.position;
+
+        
         return res;
     }
 

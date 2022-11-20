@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        info = DataManager.Instance.playerInfos[0];
+        info = DataManager.Instance.playerInfos[2];
         speed = info.MoveSpeed;
     }
 

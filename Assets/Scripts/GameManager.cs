@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        player = DataManager.Instance.playerInfos[0];
+        player = DataManager.Instance.playerInfos[2];
     }
 
     void Start()

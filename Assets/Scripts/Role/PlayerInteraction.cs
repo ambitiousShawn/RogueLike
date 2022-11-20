@@ -35,7 +35,13 @@ public class PlayerInteraction : MonoBehaviour
     private float atk1Range;
     //近战重击范围
     private float atk2Range;
+    //法师重击范围
+    private float atk3Range;
     #endregion
+
+    private GameObject Obj;
+    //存储特效的列表
+    private List<GameObject> list = new List<GameObject>();
 
     private void Awake()
     {
@@ -70,8 +76,9 @@ public class PlayerInteraction : MonoBehaviour
         //攻击距离需要手动测量，就不好读表了
         atk1Range = 0.5f;
         atk2Range = 0.7f;
+        atk3Range = 3f;
 
-        info = DataManager.Instance.playerInfos[0];
+        info = DataManager.Instance.playerInfos[2];
         //cd计数器初始化
         currCD = info.AtkCD;
         //血量初始化
@@ -197,14 +204,7 @@ public class PlayerInteraction : MonoBehaviour
     #region 动画事件
     public void Fire()
     {
-        //开火时创建出子弹(后续改为读表数据)
-        /*ResourcesManager.Instance.LoadAsync<GameObject>("Fire/火焰子弹",(obj) => 
-        {
-            //创建出来设置位置，旋转以及父物体
-            obj.transform.position = firePoint.position;
-            obj.transform.rotation = Quaternion.identity;
-        });*/
-
+        //TODO:武器系统出来时，此处子弹路径读表
         PoolManager.Instance.GetElement("Fire/火焰子弹", firePoint);
     }
 
@@ -244,11 +244,48 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
     }
+
+    //法师重击
+    public void Atk3()
+    {
+        Collider2D[] coll = Physics2D.OverlapCircleAll(transform.position, atk3Range, 1 << LayerMask.NameToLayer("Enemy"));
+
+        foreach (Collider2D c in coll)
+        {
+            //Bug记录：怪物身上有两个碰撞器，需要排除不是触发器的那个，此外，子类也存在触发器，将子类图层改为非Enemy即可解决。
+            if (c.isTrigger)
+            {
+                //闪电特效(用缓存池)
+                Obj = PoolManager.Instance.GetElement("Fire/闪电");
+                Obj.transform.position = new Vector2(c.transform.position.x, c.transform.position.y + 1);
+                list.Add(Obj);
+                Invoke("DelayPut", 1f);
+                //转换敌人的受伤状态
+                FSM fsm = c.GetComponent<FSM>();
+                fsm.parameter.getHit = true;
+                //Test:伤害值后期读表
+                fsm.Hit(info.BaseAtk * 3); ;
+            }
+        }
+    }
+
+    private void DelayPut()
+    {
+        foreach(GameObject o in list)
+            if (o != null)
+                PoolManager.Instance.SetElement("Fire/闪电", o);
+    }
+
+    //剑客重击
+    public void Atk4()
+    {
+        GameObject obj = PoolManager.Instance.GetElement("Fire/剑气", firePoint);
+    }
     #endregion
 
-    /*private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(atk1Point.position, atk1Range);
-    }*/
+        Gizmos.DrawWireSphere(transform.position, atk3Range);
+    }
 }
