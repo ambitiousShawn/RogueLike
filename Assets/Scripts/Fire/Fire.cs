@@ -54,7 +54,6 @@ public class Fire : MonoBehaviour
             //进入缓存池
             PoolManager.Instance.SetElement("Fire/火焰子弹", gameObject);
             needDestroy = false;
-            //TODO:产生特效
         }
     }
     #endregion

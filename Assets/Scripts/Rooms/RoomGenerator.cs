@@ -53,9 +53,10 @@ public class RoomGenerator : MonoBehaviour
         //rooms[0].GetComponent<SpriteRenderer>().color = startColor;
         SpriteRenderer[] sr = rooms[0].GetComponentsInChildren<SpriteRenderer>();
         foreach (var s in sr)
-            if (!s.tag.StartsWith ("Door_"))
+            if (!s.tag.StartsWith("Door_"))
+            {
                 s.color = startColor;
-        
+            }
 
         //定义变量存储结束位置
         Transform endRoom = rooms[0].transform;

@@ -9,13 +9,18 @@ public class Player : MonoBehaviour
     //动画组件
     private Animator anim;
 
+    //玩家数据
+    private PlayerInfo info;
+
     //移动数值
-    public float speed = 5;
+    private float speed;
 
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        info = DataManager.Instance.playerInfos[0];
+        speed = info.MoveSpeed;
     }
 
     void FixedUpdate()

@@ -15,9 +15,15 @@ public class PlayerInteraction : MonoBehaviour
 
 
     #region 角色数值(读表赋值)
+    //玩家数据
+    private PlayerInfo info;
+
     //攻击冷却
-    public float atkCD = 0.4f;
     private float currCD;
+    //当前血量
+    private int currHealth;
+    //当前攻击力
+    private int currAtk;
 
     //重击蓄力时长
     public float HitTimer = 1;
@@ -35,22 +41,21 @@ public class PlayerInteraction : MonoBehaviour
     {
         InputManager.Instance.SwitchState(true);
         EventManager.Instance.AddEventListener<KeyCode>("KeyDown", CheckKeyDown);
-        EventManager.Instance.AddEventListener<KeyCode>("KeyUp", CheckKeyUp);
-
-        //Test:
-        UIManager.Instance.ShowPanel<GamePanel>("GamePanel");
+        EventManager.Instance.AddEventListener<KeyCode>("KeyUp", CheckKeyUp);    
     }
 
     void Start()
     {
         //组件赋值
         anim = GetComponent<Animator>();
-        gamePanel = GameObject.Find("Canvas/GamePanel").GetComponent<GamePanel>();
+
+        UIManager.Instance.ShowPanel<GamePanel>("GamePanel", (panel) =>
+        {
+            gamePanel = panel;
+        });
 
         XOffset = 16;
         YOffset = 12;
-        
-        currCD = atkCD;
 
         //找到开火点
         firePoint = transform.Find("firePoint");
@@ -61,9 +66,18 @@ public class PlayerInteraction : MonoBehaviour
     void Init()
     {
         atk1Point = transform.Find("Atk1Range");
-        //Test:读表
+        //读表赋值
+        //攻击距离需要手动测量，就不好读表了
         atk1Range = 0.5f;
         atk2Range = 0.7f;
+
+        info = DataManager.Instance.playerInfos[0];
+        //cd计数器初始化
+        currCD = info.AtkCD;
+        //血量初始化
+        currHealth = info.Health;
+        //攻击力初始化
+        currAtk = info.BaseAtk;
     }
 
     void Update()
@@ -89,7 +103,9 @@ public class PlayerInteraction : MonoBehaviour
         if (currTimer >= 1)
             anim.SetBool("isCombo", true);
         //更新蓄力时间UI
-        gamePanel.UpdateBarState(currTimer , HitTimer);
+        //Bug记录：不加非空判断会报空指针(异步加载的先后性)
+        if (gamePanel != null)
+            gamePanel.UpdateBarState(currTimer , HitTimer);
     }
 
     //检测键盘按下
@@ -98,13 +114,13 @@ public class PlayerInteraction : MonoBehaviour
         if (keycode == KeyCode.M)
         {
             if (!UIManager.Instance.panelDic.ContainsKey("MiniMapPanel"))
-                UIManager.Instance.ShowPanel<BasePanel>("MiniMapPanel");
+                UIManager.Instance.ShowPanel<MiniMapPanel>("MiniMapPanel");
             else
                 UIManager.Instance.HidePanel("MiniMapPanel");
         }
 
         //角色攻击
-        if (keycode == KeyCode.J && currCD >= atkCD)
+        if (keycode == KeyCode.J && currCD >= info.AtkCD)
         {
             
             currCD = 0;
@@ -114,7 +130,7 @@ public class PlayerInteraction : MonoBehaviour
             Jtrigger = true;
         }
 
-        if (keycode == KeyCode.K && currCD >= atkCD)
+        if (keycode == KeyCode.K && currCD >= info.AtkCD)
         {
             currCD = 0;
             anim.SetTrigger("Shoot");
@@ -137,7 +153,6 @@ public class PlayerInteraction : MonoBehaviour
     #region 触发器相关
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print(GameManager.Instance.isSucceed);
         if (collision.tag.StartsWith("Door_") && GameManager.Instance.isSucceed)
         {
             
@@ -166,6 +181,14 @@ public class PlayerInteraction : MonoBehaviour
                 transform.position = new Vector3(transform.position.x, transform.position.y - 6, transform.position.z);
             }
 
+        }
+
+        //进入下一个房间时，将其设置为已探索
+        if (collision.CompareTag("Room") && !collision.transform.GetComponent<Room>().IsArrived)
+        {
+            print("进入下一个房间");
+            Room currRoom = collision.transform.GetComponent<Room>();
+            currRoom.IsArrived = true;
         }
     }
     #endregion
@@ -198,8 +221,8 @@ public class PlayerInteraction : MonoBehaviour
                 //转换敌人的受伤状态
                 FSM fsm = c.GetComponent<FSM>();
                 fsm.parameter.getHit = true;
-                //Test:伤害值后期读表
-                fsm.Hit(2);
+                //伤害值后期读表
+                fsm.Hit(info.BaseAtk);
             }
         }
     }
@@ -217,15 +240,15 @@ public class PlayerInteraction : MonoBehaviour
                 FSM fsm = c.GetComponent<FSM>();
                 fsm.parameter.getHit = true;
                 //Test:伤害值后期读表
-                fsm.Hit(5);
+                fsm.Hit(info.BaseAtk * 3); ;
             }
         }
     }
     #endregion
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(atk1Point.position, atk1Range);
-    }
+    }*/
 }
