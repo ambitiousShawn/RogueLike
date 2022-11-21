@@ -16,7 +16,9 @@ public class PlayerInteraction : MonoBehaviour
 
     #region 角色数值(读表赋值)
     //玩家数据
-    private PlayerInfo info;
+    private PlayerInfo playerInfo;
+    //武器数据
+    private WeaponInfo weaponInfo;
 
     //攻击冷却
     private float currCD;
@@ -29,6 +31,7 @@ public class PlayerInteraction : MonoBehaviour
     public float HitTimer = 1;
     private float currTimer = 0;
     private bool Jtrigger = false;
+    private bool isUp = true;
 
     //近战轻击范围
     private Transform atk1Point;
@@ -78,13 +81,14 @@ public class PlayerInteraction : MonoBehaviour
         atk2Range = 0.7f;
         atk3Range = 3f;
 
-        info = DataManager.Instance.playerInfos[2];
+        playerInfo = DataManager.Instance.playerInfos[GameManager.Instance.num];
+        weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
         //cd计数器初始化
-        currCD = info.AtkCD;
+        currCD = playerInfo.AtkCD;
         //血量初始化
-        currHealth = info.Health;
+        currHealth = playerInfo.Health;
         //攻击力初始化
-        currAtk = info.BaseAtk;
+        currAtk = playerInfo.BaseAtk;
     }
 
     void Update()
@@ -103,12 +107,31 @@ public class PlayerInteraction : MonoBehaviour
 
         //重击蓄力计算
         if (Jtrigger)
-            currTimer += Time.deltaTime;
+        {
+            if (isUp)
+            {
+                currTimer += Time.deltaTime * 0.5f;
+                if (currTimer >= 1)
+                {
+                    anim.SetBool("isCombo", true);
+                    isUp = false;
+                }
+            }
+            else
+            {
+                currTimer -= Time.deltaTime * 0.5f;
+                if (currTimer <= 0)
+                {
+                    anim.SetBool("isCombo", false);
+                    isUp = true;
+                }
+            }
+            
+        } 
         else
             currTimer = 0;
 
-        if (currTimer >= 1)
-            anim.SetBool("isCombo", true);
+        
         //更新蓄力时间UI
         //Bug记录：不加非空判断会报空指针(异步加载的先后性)
         if (gamePanel != null)
@@ -118,6 +141,7 @@ public class PlayerInteraction : MonoBehaviour
     //检测键盘按下
     private void CheckKeyDown(KeyCode keycode)
     {
+        //开启 / 关闭小地图
         if (keycode == KeyCode.M)
         {
             if (!UIManager.Instance.panelDic.ContainsKey("MiniMapPanel"))
@@ -127,7 +151,7 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         //角色攻击
-        if (keycode == KeyCode.J && currCD >= info.AtkCD)
+        if (keycode == KeyCode.J && currCD >= playerInfo.AtkCD)
         {
             
             currCD = 0;
@@ -137,12 +161,38 @@ public class PlayerInteraction : MonoBehaviour
             Jtrigger = true;
         }
 
-        if (keycode == KeyCode.K && currCD >= info.AtkCD)
+        //角色射击
+        if (keycode == KeyCode.K && currCD >= weaponInfo.AtkCD)
         {
             currCD = 0;
             anim.SetTrigger("Shoot");
         }
 
+        //切换武器
+        if (keycode == KeyCode.Alpha1)
+        {
+            GameManager.Instance.weaponNum = 0;
+            weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 0);
+        }
+        else if (keycode == KeyCode.Alpha2)
+        {
+            GameManager.Instance.weaponNum = 1;
+            weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 1);
+        }
+        else if (keycode == KeyCode.Alpha3)
+        {
+            GameManager.Instance.weaponNum = 2;
+            weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 2);
+        }
+        else if (keycode == KeyCode.Alpha4)
+        {
+            GameManager.Instance.weaponNum = 3;
+            weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 3);
+        }
     }
 
     //检测键盘抬起
@@ -193,7 +243,6 @@ public class PlayerInteraction : MonoBehaviour
         //进入下一个房间时，将其设置为已探索
         if (collision.CompareTag("Room") && !collision.transform.GetComponent<Room>().IsArrived)
         {
-            print("进入下一个房间");
             Room currRoom = collision.transform.GetComponent<Room>();
             currRoom.IsArrived = true;
         }
@@ -202,10 +251,11 @@ public class PlayerInteraction : MonoBehaviour
 
 
     #region 动画事件
+    //默认子弹
     public void Fire()
     {
-        //TODO:武器系统出来时，此处子弹路径读表
-        PoolManager.Instance.GetElement("Fire/火焰子弹", firePoint);
+        //武器系统出来时，此处子弹路径读表
+        PoolManager.Instance.GetElement(weaponInfo.Resource, firePoint);
     }
 
     public void Atk1()
@@ -222,7 +272,7 @@ public class PlayerInteraction : MonoBehaviour
                 FSM fsm = c.GetComponent<FSM>();
                 fsm.parameter.getHit = true;
                 //伤害值后期读表
-                fsm.Hit(info.BaseAtk);
+                fsm.Hit(playerInfo.BaseAtk);
             }
         }
     }
@@ -239,8 +289,7 @@ public class PlayerInteraction : MonoBehaviour
                 //转换敌人的受伤状态
                 FSM fsm = c.GetComponent<FSM>();
                 fsm.parameter.getHit = true;
-                //Test:伤害值后期读表
-                fsm.Hit(info.BaseAtk * 3); ;
+                fsm.Hit(playerInfo.BaseAtk * 3); ;
             }
         }
     }
@@ -264,7 +313,7 @@ public class PlayerInteraction : MonoBehaviour
                 FSM fsm = c.GetComponent<FSM>();
                 fsm.parameter.getHit = true;
                 //Test:伤害值后期读表
-                fsm.Hit(info.BaseAtk * 3); ;
+                fsm.Hit(playerInfo.BaseAtk * 3); ;
             }
         }
     }
@@ -279,13 +328,27 @@ public class PlayerInteraction : MonoBehaviour
     //剑客重击
     public void Atk4()
     {
-        GameObject obj = PoolManager.Instance.GetElement("Fire/剑气", firePoint);
+        PoolManager.Instance.GetElement("Fire/剑气", firePoint);
+    }
+
+    //拳师冲击波
+    public void Atk5()
+    {
+        PoolManager.Instance.GetElement("Fire/冲击波", firePoint);
+    }
+
+    //拳师轻击
+    public void Atk6()
+    {
+        PoolManager.Instance.GetElement("Fire/Gift", firePoint);
     }
     #endregion
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, atk3Range);
-    }
+    }*/
+
+    
 }

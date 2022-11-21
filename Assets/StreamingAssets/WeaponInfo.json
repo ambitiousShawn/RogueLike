@@ -1,0 +1,34 @@
+[
+    {
+        "ID": 1,
+        "Resource": "Fire/FireBullet",
+        "Damage": 2,
+        "AtkCD": 0.5,
+        "BulletNum": 999,
+        "FlySpeed": 6
+    },
+    {
+        "ID": 2,
+        "Resource": "Fire/PowerfulFire",
+        "Damage": 3,
+        "AtkCD": 0.6,
+        "BulletNum": 12,
+        "FlySpeed": 8
+    },
+    {
+        "ID": 3,
+        "Resource": "Fire/Wind",
+        "Damage": 1,
+        "AtkCD": 1,
+        "BulletNum": 5,
+        "FlySpeed": 10
+    },
+    {
+        "ID": 4,
+        "Resource": "Fire/BlueCJB",
+        "Damage": 6,
+        "AtkCD": 0.4,
+        "BulletNum": 10,
+        "FlySpeed": 9
+    }
+]

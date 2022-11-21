@@ -1092,10 +1092,10 @@ TextureImporter:
       name: Santa - Sprite Sheet_44
       rect:
         serializedVersion: 2
-        x: 191
-        y: 1344
-        width: 24
-        height: 98
+        x: 193
+        y: 1376
+        width: 33
+        height: 29
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1178,8 +1178,8 @@ TextureImporter:
         serializedVersion: 2
         x: 2
         y: 1376
-        width: 28
-        height: 30
+        width: 32
+        height: 31
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1197,10 +1197,10 @@ TextureImporter:
       name: Santa - Sprite Sheet_49
       rect:
         serializedVersion: 2
-        x: 94
-        y: 1248
-        width: 25
-        height: 98
+        x: 98
+        y: 1279
+        width: 31
+        height: 43
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1220,7 +1220,7 @@ TextureImporter:
         serializedVersion: 2
         x: 98
         y: 1376
-        width: 23
+        width: 32
         height: 30
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -1239,10 +1239,10 @@ TextureImporter:
       name: Santa - Sprite Sheet_51
       rect:
         serializedVersion: 2
-        x: 287
-        y: 1344
-        width: 34
-        height: 62
+        x: 288
+        y: 1375
+        width: 36
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1260,10 +1260,10 @@ TextureImporter:
       name: Santa - Sprite Sheet_52
       rect:
         serializedVersion: 2
-        x: 383
-        y: 1344
-        width: 35
-        height: 62
+        x: 384
+        y: 1375
+        width: 36
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1281,10 +1281,10 @@ TextureImporter:
       name: Santa - Sprite Sheet_53
       rect:
         serializedVersion: 2
-        x: 478
-        y: 1344
-        width: 98
-        height: 62
+        x: 481
+        y: 1374
+        width: 33
+        height: 31
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1304,8 +1304,8 @@ TextureImporter:
         serializedVersion: 2
         x: 2
         y: 1280
-        width: 31
-        height: 30
+        width: 33
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1323,10 +1323,10 @@ TextureImporter:
       name: Santa - Sprite Sheet_55
       rect:
         serializedVersion: 2
-        x: 191
-        y: 1248
-        width: 37
-        height: 62
+        x: 193
+        y: 1279
+        width: 35
+        height: 31
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1345,9 +1345,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 287
-        y: 1248
+        y: 1279
         width: 38
-        height: 61
+        height: 30
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1365,10 +1365,10 @@ TextureImporter:
       name: Santa - Sprite Sheet_57
       rect:
         serializedVersion: 2
-        x: 383
-        y: 1248
-        width: 97
-        height: 62
+        x: 386
+        y: 1279
+        width: 31
+        height: 31
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

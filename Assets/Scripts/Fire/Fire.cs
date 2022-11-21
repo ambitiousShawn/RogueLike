@@ -5,39 +5,31 @@ using UnityEngine;
 /*
     子弹被创建出来后执行的操作
  */
-public class Fire : MonoBehaviour
+public class Fire : FlyableFire
 {
-    //后期读表填值，目前先给默认值
-    private float speed;
+    //普通子弹的数据文件
+    WeaponInfo info = DataManager.Instance.weaponInfos[0];
 
-    //获取角色的面向，判断子弹运动方向
-    private Transform player;
-    private int shootDir;
-    //是否需要延时销毁
-    private bool needDestroy = true;
-
-    void OnEnable()
+    protected override void OnEnable()
     {
-        player = GameObject.Find("Player").transform;
-        //存储子弹的射击方向
-        shootDir = player.localScale.x > 0 ? 1 : -1;
-        speed = 6;
+        base.OnEnable();
 
-        Invoke("DestroyBullet", 3f);
+        speed = info.FlySpeed;
     }
 
-    void Update()
+    protected override void FixedUpdate()
     {
+        base.FixedUpdate();
         //子弹的移动
         transform.Translate(shootDir * speed * Time.deltaTime, 0, 0);
     }
 
     //手动销毁子弹
-    private void DestroyBullet()
+    protected override void DestroyBullet()
     {
         if (needDestroy)
         {
-            PoolManager.Instance.SetElement("Fire/火焰子弹", gameObject);
+            PoolManager.Instance.SetElement(info.Resource, gameObject);
         }
     }
 
@@ -49,10 +41,10 @@ public class Fire : MonoBehaviour
         {
             FSM fsm = collision.GetComponent<FSM>();
             //TODO:伤害数值读表
-            fsm.Hit(2);
+            fsm.Hit(info.Damage);
             fsm.parameter.getHit = true;
             //进入缓存池
-            PoolManager.Instance.SetElement("Fire/火焰子弹", gameObject);
+            PoolManager.Instance.SetElement(info.Resource, gameObject);
             needDestroy = false;
         }
     }

@@ -22,11 +22,15 @@ public class GameManager : MonoBehaviour
     public PlayerInfo player;
 
     public GameObject playerObj;
+    //当前玩家选择的角色
+    public int num;
+    //当前玩家选择的武器
+    public int weaponNum;
 
     private void Awake()
     {
         instance = this;
-        player = DataManager.Instance.playerInfos[2];
+        player = DataManager.Instance.playerInfos[num];
     }
 
     void Start()
@@ -46,6 +50,7 @@ public class GameManager : MonoBehaviour
         {
             isSucceed = false;
         }
+
     }
 
     //初始化玩家的逻辑

@@ -22,6 +22,10 @@ public class InputManager : Singleton<InputManager>
         CheckKey(KeyCode.M);
         CheckKey(KeyCode.J);
         CheckKey(KeyCode.K);
+        CheckKey(KeyCode.Alpha1);
+        CheckKey(KeyCode.Alpha2);
+        CheckKey(KeyCode.Alpha3);
+        CheckKey(KeyCode.Alpha4);
     }
 
     //º¸≈Ãœ‡πÿ

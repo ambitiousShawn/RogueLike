@@ -43,7 +43,9 @@ public class PoolManager : Singleton<PoolManager>
         else
         {
             //当没有想要的元素时
-            res = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>(name));
+            Debug.Log(name);
+            res = ResourcesManager.Instance.Load<GameObject>(name);
+            Debug.Log(res);
             res.name = name;
             
         }
@@ -53,7 +55,6 @@ public class PoolManager : Singleton<PoolManager>
         if (initTrans != null)
             res.transform.position = initTrans.position;
 
-        
         return res;
     }
 

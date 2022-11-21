@@ -373,6 +373,8 @@ MonoBehaviour:
   isSucceed: 0
   enemyNum: 0
   playerObj: {fileID: 0}
+  num: 3
+  weaponNum: 1
 --- !u!4 &676162472
 Transform:
   m_ObjectHideFlags: 0
@@ -1145,7 +1147,7 @@ PrefabInstance:
     - target: {fileID: 2934913633648546659, guid: 884887f8fe82eed4bab732fe427745c8,
         type: 3}
       propertyPath: m_Mass
-      value: 100
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2934913633648546661, guid: 884887f8fe82eed4bab732fe427745c8,
         type: 3}
@@ -1169,7 +1171,7 @@ PrefabInstance:
     - target: {fileID: 3060849834574278813, guid: 524fb17791c427b40b97258ba25597cb,
         type: 3}
       propertyPath: m_Mass
-      value: 100
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3060849834574278816, guid: 524fb17791c427b40b97258ba25597cb,
         type: 3}
@@ -1268,7 +1270,12 @@ PrefabInstance:
     - target: {fileID: 8395336077748617355, guid: ab39cd7ab03af204c9dfe9794bb5a2df,
         type: 3}
       propertyPath: m_Mass
-      value: 100
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395336077748617355, guid: ab39cd7ab03af204c9dfe9794bb5a2df,
+        type: 3}
+      propertyPath: m_LinearDrag
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8395336077748617357, guid: ab39cd7ab03af204c9dfe9794bb5a2df,
         type: 3}
