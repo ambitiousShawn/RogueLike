@@ -13,6 +13,8 @@ public class PlayerInteraction : MonoBehaviour
     //开火点坐标
     private Transform firePoint;
 
+    //上帝模式(受击后切换该状态1s)、
+    private bool isGod;
 
     #region 角色数值(读表赋值)
     //玩家数据
@@ -26,6 +28,8 @@ public class PlayerInteraction : MonoBehaviour
     private int currHealth;
     //当前攻击力
     private int currAtk;
+    //当前武器子弹数量
+    private int currBullet;
 
     //重击蓄力时长
     public float HitTimer = 1;
@@ -89,10 +93,17 @@ public class PlayerInteraction : MonoBehaviour
         currHealth = playerInfo.Health;
         //攻击力初始化
         currAtk = playerInfo.BaseAtk;
+        //武器子弹数量初始化
+        currBullet = weaponInfo.BulletNum;
     }
 
     void Update()
     {
+        if (GameManager.Instance.isDead)
+        {
+            anim.SetBool("isDead", true);
+            InputManager.Instance.SwitchState(false);
+        }
         CoolDown();
     }
 
@@ -100,9 +111,9 @@ public class PlayerInteraction : MonoBehaviour
     private void CoolDown()
     {
         currCD += Time.deltaTime;
-        if (currCD >= 1)
+        if (currCD >= 1.5)
         {
-            currCD = 1;
+            currCD = 1.5f;
         }
 
         //重击蓄力计算
@@ -164,33 +175,48 @@ public class PlayerInteraction : MonoBehaviour
         //角色射击
         if (keycode == KeyCode.K && currCD >= weaponInfo.AtkCD)
         {
-            currCD = 0;
-            anim.SetTrigger("Shoot");
+            //子弹数量逻辑
+            currBullet--;
+            if (currBullet < 0)
+            {
+                currBullet = 0;
+                //TODO:后续可播放卡膛音效
+            }
+            else
+            {
+                currCD = 0;
+                anim.SetTrigger("Shoot");
+            }
+            gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum, weaponInfo.ID - 1);
         }
 
-        //切换武器
+        //Test:切换武器，方便测试，后续需要删除
         if (keycode == KeyCode.Alpha1)
         {
             GameManager.Instance.weaponNum = 0;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
-            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 0);
+            currBullet = weaponInfo.BulletNum;
+            gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum, 0);
         }
         else if (keycode == KeyCode.Alpha2)
         {
             GameManager.Instance.weaponNum = 1;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            currBullet = weaponInfo.BulletNum;
             gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 1);
         }
         else if (keycode == KeyCode.Alpha3)
         {
             GameManager.Instance.weaponNum = 2;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            currBullet = weaponInfo.BulletNum;
             gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 2);
         }
         else if (keycode == KeyCode.Alpha4)
         {
             GameManager.Instance.weaponNum = 3;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            currBullet = weaponInfo.BulletNum;
             gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 3);
         }
     }
@@ -205,6 +231,31 @@ public class PlayerInteraction : MonoBehaviour
             gamePanel.SwitchBarState(false);
             Jtrigger = false;
         }
+    }
+
+    //受伤函数
+    public void Wound(int damage)
+    {
+        if (isGod) return;
+
+        currHealth -= damage;
+        if (currHealth < 0)
+        {
+            currHealth = 0;
+            GameManager.Instance.isDead = true;
+        }
+        gamePanel.UpdateBloodBar(currHealth, playerInfo.Health);
+
+        //受击变红
+        GetComponent<SpriteRenderer>().color = Color.red;
+        isGod = true;
+        Invoke("color", 1f);
+    }
+
+    private void color()
+    {
+        GetComponent<SpriteRenderer>().color = Color.white;
+        isGod = false;
     }
 
     #region 触发器相关

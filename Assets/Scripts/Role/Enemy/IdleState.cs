@@ -224,7 +224,12 @@ public class AttackState : IState
 
     public void OnEnter()
     {
-        parameter.anim.Play("Atk");
+        if (parameter.currCD >= 1.5f)
+        {
+            parameter.anim.Play("Atk");
+            parameter.currCD = 0;
+        }
+            
     }
 
     public void OnExit()

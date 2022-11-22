@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
     //当前玩家选择的武器
     public int weaponNum;
 
+    //玩家是否死亡
+    public bool isDead;
+
     private void Awake()
     {
         instance = this;
@@ -37,6 +40,7 @@ public class GameManager : MonoBehaviour
     {
         enemyNum = 0;
         UIManager.Instance.ShowPanel<MiniMapPanel>("MiniMapPanel");
+        isDead = false;
         Init();
     }
 

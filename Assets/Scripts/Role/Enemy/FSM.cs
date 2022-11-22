@@ -35,6 +35,9 @@ public class Parameter
     public bool getHit;
     //敌人的着色器组件(受击身体变红)
     public SpriteRenderer shader;
+
+    //攻击冷却时间
+    public float currCD = 0;
 }
 
 
@@ -46,6 +49,7 @@ public class FSM : MonoBehaviour
     private Dictionary<StateType, IState> states = new Dictionary<StateType, IState>();
     //属性
     public Parameter parameter;
+    
 
     void Start()
     {
@@ -64,6 +68,17 @@ public class FSM : MonoBehaviour
     void Update()
     {
         currState.OnUpdate();
+        CoolDown();
+    }
+
+    //冷却逻辑
+    private void CoolDown()
+    {
+        parameter.currCD += Time.deltaTime;
+        if (parameter.currCD >= 1.5f)
+        {
+            parameter.currCD = 1.5f;
+        }
     }
 
     //转移状态逻辑
@@ -116,6 +131,16 @@ public class FSM : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region 动画事件
+    public void Atk()
+    {
+        if (parameter.player != null )
+        {
+            parameter.player.GetComponent<PlayerInteraction>().Wound(2);
+        }
+    }
     #endregion
 
     private void OnDrawGizmos()

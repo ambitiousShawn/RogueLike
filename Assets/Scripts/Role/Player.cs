@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GameManager.Instance.isDead) return;
         Move();
     }
 

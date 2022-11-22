@@ -10,4 +10,5 @@ public class PlayerInfo
     public float AtkCD;
     public int Health;
     public int MoveSpeed;
+    public string UISprite;
 }
