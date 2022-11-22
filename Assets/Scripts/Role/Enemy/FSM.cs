@@ -18,8 +18,10 @@ public enum StateType
 public class Parameter
 {
     public int health;
-    public float moveSpeed;
-    public float chaseSpeed;
+    public int minMoveSpeed;
+    public int maxMoveSpeed;
+    public int minChaseSpeed;
+    public int maxChaseSpeed;
     public float idleTime;
     public Transform[] patrolPoints;
     public Transform[] chasePoints;

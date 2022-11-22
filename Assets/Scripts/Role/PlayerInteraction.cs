@@ -9,7 +9,8 @@ public class PlayerInteraction : MonoBehaviour
     //动画组件
     private Animator anim;
     //蓄力UI
-    private GamePanel gamePanel;
+    [HideInInspector]
+    public GamePanel gamePanel;
     //开火点坐标
     private Transform firePoint;
 
@@ -18,14 +19,16 @@ public class PlayerInteraction : MonoBehaviour
 
     #region 角色数值(读表赋值)
     //玩家数据
-    private PlayerInfo playerInfo;
+    [HideInInspector]
+    public PlayerInfo playerInfo;
     //武器数据
     private WeaponInfo weaponInfo;
 
     //攻击冷却
     private float currCD;
     //当前血量
-    private int currHealth;
+    [HideInInspector]
+    public int currHealth;
     //当前攻击力
     private int currAtk;
     //当前武器子弹数量
@@ -187,7 +190,38 @@ public class PlayerInteraction : MonoBehaviour
                 currCD = 0;
                 anim.SetTrigger("Shoot");
             }
-            gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum, weaponInfo.ID - 1);
+            gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
+        }
+
+        //扔炸弹
+        if (keycode == KeyCode.E && currCD >= playerInfo.AtkCD)
+        {
+            if (GameManager.Instance.bomb > 0)
+            {
+                //在玩家位置生成一枚炸弹，播放默认动画
+                GameObject bomb = ResourcesManager.Instance.Load<GameObject>("Collections/Bomb");
+                bomb.transform.position = transform.position;
+                bomb.GetComponent<Animator>().enabled = true;
+                bomb.GetComponent<Collider2D>().enabled = false;
+                //背包里数量减一
+                gamePanel.UpdateCollections(-1);
+            }
+            
+        }
+
+        //吃鸡腿
+        if (keycode == KeyCode.R && currHealth < playerInfo.Health && GameManager.Instance.chicken > 0)
+        {
+            //背包物体减1
+            gamePanel.UpdateCollections(0, 0, 0, -1);
+
+            //回血逻辑
+            currHealth += 3;
+            if (currHealth > playerInfo.Health)
+            {
+                currHealth = playerInfo.Health;
+            }
+            gamePanel.UpdateBloodBar(currHealth, playerInfo.Health);
         }
 
         //Test:切换武器，方便测试，后续需要删除
@@ -196,28 +230,28 @@ public class PlayerInteraction : MonoBehaviour
             GameManager.Instance.weaponNum = 0;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
             currBullet = weaponInfo.BulletNum;
-            gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum, 0);
+            gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
         }
         else if (keycode == KeyCode.Alpha2)
         {
             GameManager.Instance.weaponNum = 1;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
             currBullet = weaponInfo.BulletNum;
-            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 1);
+            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
         }
         else if (keycode == KeyCode.Alpha3)
         {
             GameManager.Instance.weaponNum = 2;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
             currBullet = weaponInfo.BulletNum;
-            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 2);
+            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
         }
         else if (keycode == KeyCode.Alpha4)
         {
             GameManager.Instance.weaponNum = 3;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
             currBullet = weaponInfo.BulletNum;
-            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum, 3);
+            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
         }
     }
 
@@ -239,7 +273,7 @@ public class PlayerInteraction : MonoBehaviour
         if (isGod) return;
 
         currHealth -= damage;
-        if (currHealth < 0)
+        if (currHealth <= 0)
         {
             currHealth = 0;
             GameManager.Instance.isDead = true;

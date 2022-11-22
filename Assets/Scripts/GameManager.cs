@@ -30,6 +30,13 @@ public class GameManager : MonoBehaviour
     //玩家是否死亡
     public bool isDead;
 
+    #region 收集物相关
+    public int money = 0;
+    public int key = 0;
+    public int bomb = 0;
+    public int chicken = 0;
+    #endregion
+
     private void Awake()
     {
         instance = this;

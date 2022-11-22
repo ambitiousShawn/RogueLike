@@ -5,30 +5,34 @@
         "Damage": 2,
         "AtkCD": 0.5,
         "BulletNum": 999,
-        "FlySpeed": 6
+        "FlySpeed": 6,
+        "UISprite": "Fire/UI/FireBullet"
     },
     {
         "ID": 2,
         "Resource": "Fire/PowerfulFire",
         "Damage": 3,
-        "AtkCD": 0.8,
+        "AtkCD": 0.6,
         "BulletNum": 12,
-        "FlySpeed": 8
+        "FlySpeed": 8,
+        "UISprite": "Fire/UI/PowerfulFire"
     },
     {
         "ID": 3,
         "Resource": "Fire/Wind",
         "Damage": 1,
-        "AtkCD": 1.5,
+        "AtkCD": 1,
         "BulletNum": 5,
-        "FlySpeed": 10
+        "FlySpeed": 10,
+        "UISprite": "Fire/UI/Wind"
     },
     {
         "ID": 4,
         "Resource": "Fire/BlueCJB",
         "Damage": 6,
-        "AtkCD": 0.7,
+        "AtkCD": 0.4,
         "BulletNum": 10,
-        "FlySpeed": 9
+        "FlySpeed": 9,
+        "UISprite": "Fire/UI/BlueCJB"
     }
 ]

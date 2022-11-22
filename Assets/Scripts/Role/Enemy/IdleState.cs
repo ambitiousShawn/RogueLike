@@ -62,10 +62,14 @@ public class PatrolState : IState
     //巡逻位置
     private int patrolPosition;
 
+    //随机移动速度
+    private int moveSpeed;
+
     public PatrolState(FSM manager)
     {
         this.manager = manager;
         this.parameter = manager.parameter;
+        moveSpeed = Random.Range(parameter.minMoveSpeed, parameter.maxMoveSpeed);
     }
 
     public void OnEnter()
@@ -88,7 +92,7 @@ public class PatrolState : IState
         manager.FlipTo(parameter.patrolPoints[patrolPosition]);
         //让怪物移动到目标点
         manager.transform.position = Vector2.MoveTowards(manager.transform.position,
-            parameter.patrolPoints[patrolPosition].position, parameter.moveSpeed * Time.deltaTime);
+            parameter.patrolPoints[patrolPosition].position, moveSpeed * Time.deltaTime);
 
         //检测是否受伤
         if (parameter.getHit)
@@ -115,10 +119,14 @@ public class ChaseState : IState
     private FSM manager;
     private Parameter parameter;
 
+    //随机追击速度
+    private int chaseSpeed;
+
     public ChaseState(FSM manager)
     {
         this.manager = manager;
         this.parameter = manager.parameter;
+        chaseSpeed = Random.Range(parameter.minChaseSpeed, parameter.maxChaseSpeed);
     }
 
     public void OnEnter()
@@ -146,7 +154,7 @@ public class ChaseState : IState
         //敌人追击
         if (parameter.player != null)
             manager.transform.position = Vector2.MoveTowards(manager.transform.position, parameter.player.position,
-                parameter.chaseSpeed * Time.deltaTime);
+                chaseSpeed * Time.deltaTime);
 
         //当超出范围时,切换到静止状态
         else

@@ -10,4 +10,5 @@ public class WeaponInfo
     public float AtkCD;
     public int BulletNum;
     public int FlySpeed;
+    public string UISprite;
 }

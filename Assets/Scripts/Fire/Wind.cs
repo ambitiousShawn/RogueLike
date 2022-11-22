@@ -7,7 +7,7 @@ public class Wind : FlyableFire
     //龙卷风的数据文件
     WeaponInfo info = DataManager.Instance.weaponInfos[2];
     //风力强度
-    private float force = 1.2f;
+    private float force = 1.5f;
 
 
     //龙卷风是否已经到达目的地

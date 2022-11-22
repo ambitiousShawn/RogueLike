@@ -171,7 +171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2ddcdc8cbcd39648a1f6aaf55898b03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
 --- !u!114 &9169414366028563001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a48ca810743594fa4d18932c6fdb8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atkCD: 0.4
   HitTimer: 1
 --- !u!1 &1333283370435293538
 GameObject:

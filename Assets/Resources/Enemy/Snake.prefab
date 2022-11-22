@@ -261,8 +261,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameter:
     health: 50
-    moveSpeed: 3
-    chaseSpeed: 4
+    minMoveSpeed: 1
+    maxMoveSpeed: 4
+    minChaseSpeed: 3
+    maxChaseSpeed: 7
     idleTime: 2
     patrolPoints:
     - {fileID: 0}
@@ -281,6 +283,7 @@ MonoBehaviour:
     attackArea: 0.3
     getHit: 0
     shader: {fileID: 2934913633648546657}
+    currCD: 0
 --- !u!61 &2934913633648546652
 BoxCollider2D:
   m_ObjectHideFlags: 0

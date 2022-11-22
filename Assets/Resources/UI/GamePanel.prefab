@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 078ac44d73445294b8af33a68c82a92d, type: 3}
+  m_Sprite: {fileID: 370779259, guid: 435efa7fa0ce88e4dafb6a6d80c498ea, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 1982289715988217296}
   - component: {fileID: 4514054146516227734}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Txt_BombNum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1
+  m_Text: 0
 --- !u!1 &2975184990787222142
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +425,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 69bd73717615e19499a1a2834e4358a7, type: 3}
+  m_Sprite: {fileID: 1294195566, guid: 435efa7fa0ce88e4dafb6a6d80c498ea, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -639,7 +639,7 @@ GameObject:
   - component: {fileID: 1840616952060508319}
   - component: {fileID: 5306511883097237814}
   m_Layer: 5
-  m_Name: Text (Legacy) (2)
+  m_Name: Txt_MoneyNum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -706,7 +706,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 3
+  m_Text: 0
 --- !u!1 &5181475886737441642
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,7 +774,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4af9d34bb9344e247a7e3252f1a90c5b, type: 3}
+  m_Sprite: {fileID: -873441477, guid: 435efa7fa0ce88e4dafb6a6d80c498ea, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -923,7 +923,7 @@ GameObject:
   - component: {fileID: 8787761760384859393}
   - component: {fileID: 726691212341465912}
   m_Layer: 5
-  m_Name: Text (Legacy) (3)
+  m_Name: Txt_Chicken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -990,7 +990,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 4
+  m_Text: 0
 --- !u!1 &6116196848607278939
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,7 +1079,7 @@ GameObject:
   - component: {fileID: 4032145663385033588}
   - component: {fileID: 3473883133403977457}
   m_Layer: 5
-  m_Name: Text (Legacy) (1)
+  m_Name: Txt_KeyNum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1146,7 +1146,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2
+  m_Text: 0
 --- !u!1 &6449770734231366544
 GameObject:
   m_ObjectHideFlags: 0
@@ -1858,7 +1858,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a21fc33dc97099f4a880aabbe2bd8784, type: 3}
+  m_Sprite: {fileID: 654963698, guid: 435efa7fa0ce88e4dafb6a6d80c498ea, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
