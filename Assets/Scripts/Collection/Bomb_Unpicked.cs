@@ -30,7 +30,7 @@ public class Bomb_Unpicked : MonoBehaviour
     #region 动画事件
     public void Boom()
     {
-        Collider2D[] coll = Physics2D.OverlapCircleAll(transform.position, 1.5f);
+        Collider2D[] coll = Physics2D.OverlapCircleAll(transform.position, 2f);
 
         foreach (Collider2D c in coll)
         {
@@ -39,11 +39,16 @@ public class Bomb_Unpicked : MonoBehaviour
                 FSM fsm = c.GetComponent<FSM>();
                 fsm.parameter.getHit = true;
                 c.GetComponent<FSM>().Hit(5);
-            }else if (c.CompareTag("Player"))
+            }
+            if (c.CompareTag("Player"))
             {
                 c.GetComponent<PlayerInteraction>().Wound(5);
             }
             //TODO:摧毁部分地形
+            if (c.CompareTag("Explode"))
+            {
+                Destroy(c.gameObject);
+            }
 
             Destroy(gameObject, 0.3f);
         }

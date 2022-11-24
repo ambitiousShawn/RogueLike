@@ -74,7 +74,7 @@ public class GamePanel : BasePanel
     {
         //更新弹夹数
         Text_BulletNum.text = currNum + " / " + maxNum;
-        //TODO:更新右下图标(改为加载资源文件)
+        //更新右下图标(改为加载资源文件)
         currWeapon.sprite = Resources.Load<Sprite>(DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum].UISprite);
     }
 

@@ -19,6 +19,8 @@ public class RoomGenerator : MonoBehaviour
     private Transform generatorPoint;
     //每个房间的位置偏移
     public float XOffset, YOffset;
+    //装预设的父物体
+    public Transform PutItemsInRoom;
 
     //存储房间的列表
     private List<Room> rooms = new List<Room>();
@@ -46,6 +48,10 @@ public class RoomGenerator : MonoBehaviour
             obj.transform.SetParent(generatorPoint.parent);
             //添加进列表
             rooms.Add(obj.GetComponent<Room>());
+
+            //TODO:在房间图层上生成随机预设地形
+            if (i != 0)
+                Instantiate(Resources.Load<GameObject>("Items/Items1"), generatorPoint.position, Quaternion.identity,PutItemsInRoom);
             //改变生成点位置
             ChangePointPos();
         }
@@ -64,7 +70,7 @@ public class RoomGenerator : MonoBehaviour
         {
             //当前房间的位置信息
             Vector2 pos = room.transform.position;
-            if (Mathf.Abs(pos.x / XOffset) + Mathf.Abs(pos.y / YOffset) > Mathf.Abs(endRoom.position.x / XOffset) + Mathf.Abs(endRoom.position.y / YOffset))
+            if (Mathf.Abs(pos.x /  XOffset) + Mathf.Abs(pos.y / YOffset) > Mathf.Abs(endRoom.position.x / XOffset) + Mathf.Abs(endRoom.position.y / YOffset))
             {
                 //计算出最远位置，然后返回
                 endRoom = room.transform;

@@ -7,7 +7,7 @@ public class Wind : FlyableFire
     //龙卷风的数据文件
     WeaponInfo info = DataManager.Instance.weaponInfos[2];
     //风力强度
-    private float force = 2f;
+    private float force = 80f;
 
 
     //龙卷风是否已经到达目的地
@@ -53,6 +53,8 @@ public class Wind : FlyableFire
             //龙卷风碰到敌人，停止运动，并且持续吸引周围的敌人
             isArrived = true;
         }
+
+        
     }
     #endregion
 
@@ -63,7 +65,7 @@ public class Wind : FlyableFire
         
         foreach (Collider2D c in coll)
         {
-            c.GetComponent<Rigidbody2D>().AddForce((transform.position - c.transform.position) * force, ForceMode2D.Impulse); 
+            c.GetComponent<Rigidbody2D>().AddForce((transform.position - c.transform.position) * force, ForceMode2D.Force); 
         }
     }
 }

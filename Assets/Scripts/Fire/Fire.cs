@@ -13,7 +13,7 @@ public class Fire : FlyableFire
     protected override void OnEnable()
     {
         base.OnEnable();
-
+       
         speed = info.FlySpeed;
     }
 
@@ -46,6 +46,17 @@ public class Fire : FlyableFire
             //进入缓存池
             PoolManager.Instance.SetElement(info.Resource, gameObject);
             needDestroy = false;
+        }
+    }
+    #endregion
+
+    #region 碰撞器相关
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Block"))
+        {
+            print("碰撞到了");
+            PoolManager.Instance.SetElement(info.Resource, gameObject);
         }
     }
     #endregion

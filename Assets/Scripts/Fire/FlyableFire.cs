@@ -24,7 +24,7 @@ public abstract class FlyableFire : MonoBehaviour
     //是否需要延时销毁
     protected bool needDestroy = true;
 
-    protected float DestroyTime = 3f;
+    protected float DestroyTime = 1f;
 
     //子类给移动速度赋值
     protected virtual void OnEnable()

@@ -47,7 +47,7 @@ public class Room : MonoBehaviour
 
         mini = transform.Find("Minimap").gameObject;
         IsArrived = false;
-        if (GetComponent<SpriteRenderer>().color.r != 1)
+        if (GetComponent<SpriteRenderer>().color.r != 0.57f)
         {
             mini.GetComponent<SpriteRenderer>().color = Color.green;
             IsArrived = true;

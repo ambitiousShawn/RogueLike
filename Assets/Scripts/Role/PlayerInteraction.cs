@@ -331,6 +331,20 @@ public class PlayerInteraction : MonoBehaviour
             Room currRoom = collision.transform.GetComponent<Room>();
             currRoom.IsArrived = true;
         }
+
+        //Åöµ½ÎäÆ÷Ê±£¬Ê°È¡Âß¼­
+        if (collision.CompareTag("Weapon"))
+        {
+            if(collision.name == "Weapon3")
+            {
+                GameManager.Instance.weaponNum = 2;
+                weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+                currBullet = weaponInfo.BulletNum;
+                gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
+
+                Destroy(collision.gameObject);
+            }
+        }
     }
     #endregion
 
