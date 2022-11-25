@@ -21,6 +21,12 @@ public class RoomGenerator : MonoBehaviour
     public float XOffset, YOffset;
     //装预设的父物体
     public Transform PutItemsInRoom;
+    //当前预设个数
+    [Header("每添加一个预设将其 + 1")]
+    public int itemsNum;
+    //当前关卡是否已经生成某预设
+    private bool[,] currItem;
+    private int randType, randNum;
 
     //存储房间的列表
     private List<Room> rooms = new List<Room>();
@@ -36,6 +42,9 @@ public class RoomGenerator : MonoBehaviour
         XOffset = 16;
         YOffset = 12;
 
+        //初始化哈希表
+        currItem = new bool[itemsNum + 1, itemsNum + 1];
+
         //动态生成多个房间
         for (int i = 0; i < roomNum; i++)
         {
@@ -50,8 +59,23 @@ public class RoomGenerator : MonoBehaviour
             rooms.Add(obj.GetComponent<Room>());
 
             //TODO:在房间图层上生成随机预设地形
-            if (i != 0)
-                Instantiate(Resources.Load<GameObject>("Items/Items1"), generatorPoint.position, Quaternion.identity,PutItemsInRoom);
+            RandItem();
+
+            while (i != 0)
+            {
+                //print(randType + " " + randNum);
+                if (!currItem[randType, randNum])
+                {
+                    Instantiate(Resources.Load<GameObject>("Items/" + randType + "/Items" + randNum), generatorPoint.position, Quaternion.identity, PutItemsInRoom);
+                    currItem[randType, randNum] = true;
+                    break;
+                }
+                else
+                {
+                    RandItem();
+                }
+            }
+                
             //改变生成点位置
             ChangePointPos();
         }
@@ -79,11 +103,45 @@ public class RoomGenerator : MonoBehaviour
             //为当前房间设置门
             SetupDoor(room);
         }
-        //endRoom.GetComponent<SpriteRenderer>().color = endColor;
-        sr = endRoom.GetComponentsInChildren<SpriteRenderer>();
-        foreach (var s in sr)
-            if (!s.tag.StartsWith("Door_"))
-                s.color = endColor;
+        //================Boss房生成逻辑===================
+        GameObject boss = Instantiate(Resources.Load<GameObject>("Room/BasicRoom"), generatorPoint.position, Quaternion.identity);
+        //设置位置信息
+        boss.transform.SetParent(generatorPoint.parent);
+        //添加进列表
+        rooms.Add(boss.GetComponent<Room>());
+        //设置Boss房和末尾房的房间门的显隐
+        SetupDoor(boss.GetComponent<Room>());
+        SetupDoor(endRoom.GetComponent<Room>());
+        foreach (var s in boss.GetComponentsInChildren<SpriteRenderer>())
+            s.color = Color.red;
+        //TODO:生成Boss房间的预设
+
+    }
+
+    //生成随机预设的方法逻辑
+    private void RandItem()
+    {
+        //生成一个随机数
+        //预设类型
+        randType = Random.Range(1, 101);
+        //print(randType);
+        if (randType % 10 == 0)
+        {
+            //生成成就房间的概率控制在0.1
+            randType = 1;
+        }
+        else if (randType % 2 == 1 && randType <= 40)
+        {
+            //生成无怪物有道具房间概率控制在0.2
+            randType = 2;
+        }
+        else
+        {
+            //生成有怪物房间概率控制在0.7
+            randType = 3;
+        }
+        //对应类型的预设号
+        randNum = Random.Range(1, itemsNum + 1);
     }
 
     void Update()

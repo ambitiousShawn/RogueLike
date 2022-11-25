@@ -7,7 +7,8 @@ public class Room : MonoBehaviour
     private Transform doorRight, doorLeft, doorUp, doorDown;
 
     //对一个房间，生成布尔值查看是否存在
-    private bool roomLeft, roomRight, roomUp, roomDown;
+    [HideInInspector]
+    public bool roomLeft, roomRight, roomUp, roomDown;
 
     private GameObject mini;
     //该房间是否被探索过
@@ -47,9 +48,9 @@ public class Room : MonoBehaviour
 
         mini = transform.Find("Minimap").gameObject;
         IsArrived = false;
-        if (GetComponent<SpriteRenderer>().color.r != 0.57f)
+        if (GetComponent<SpriteRenderer>().color.r != 0.57f &&
+            GetComponent<SpriteRenderer>().color.r != 1)
         {
-            mini.GetComponent<SpriteRenderer>().color = Color.green;
             IsArrived = true;
         }
             

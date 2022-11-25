@@ -136,7 +136,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -629681641
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 1
   m_Sprite: {fileID: -60646000, guid: 9f82ab1bcfbbf9949b9798b4598fe835, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -187,7 +187,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 999
+  m_Mass: 8
   m_LinearDrag: 10
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -229,9 +229,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameter:
-    health: 70
-    moveSpeed: 3
-    chaseSpeed: 4
+    health: 90
+    minMoveSpeed: 0
+    maxMoveSpeed: 0
+    minChaseSpeed: 0
+    maxChaseSpeed: 0
     idleTime: 2
     patrolPoints:
     - {fileID: 0}
@@ -250,6 +252,7 @@ MonoBehaviour:
     attackArea: 0.3
     getHit: 0
     shader: {fileID: 8395336077748617353}
+    currCD: 0
 --- !u!61 &8395336077748617396
 BoxCollider2D:
   m_ObjectHideFlags: 0

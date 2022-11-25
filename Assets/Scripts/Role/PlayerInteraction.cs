@@ -124,7 +124,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (isUp)
             {
-                currTimer += Time.deltaTime * 0.5f;
+                currTimer += Time.deltaTime * 0.8f;
                 if (currTimer >= 1)
                 {
                     anim.SetBool("isCombo", true);
@@ -335,15 +335,39 @@ public class PlayerInteraction : MonoBehaviour
         //碰到武器时，拾取逻辑
         if (collision.CompareTag("Weapon"))
         {
-            if(collision.name == "Weapon3")
-            {
-                GameManager.Instance.weaponNum = 2;
-                weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
-                currBullet = weaponInfo.BulletNum;
-                gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
+            //随机生成一个武器编号
+            GameManager.Instance.weaponNum = Random.Range(1, 4);
 
-                Destroy(collision.gameObject);
+            weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            currBullet = weaponInfo.BulletNum;
+            gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
+
+            //切换开启宝箱贴图
+            collision.GetComponent<SpriteRenderer>().sprite = ResourcesManager.Instance.Load<Sprite>("Room/宝箱");
+            Destroy(collision.gameObject,1f);
+            
+        }
+
+        //碰到Buff时，拾取并加成到属性上
+        if (collision.CompareTag("Buff"))
+        {
+            //随机生成一个Buff编号
+            int buffNum = Random.Range(1, 4);
+
+            switch (buffNum)
+            {
+                //TODO:增益逻辑
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
             }
+
+            //切换开启宝箱贴图
+            collision.GetComponent<SpriteRenderer>().sprite = ResourcesManager.Instance.Load<Sprite>("Room/包厢");
+            Destroy(collision.gameObject, 1f);
         }
     }
     #endregion
@@ -449,5 +473,5 @@ public class PlayerInteraction : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, atk3Range);
     }*/
 
-    
+
 }
