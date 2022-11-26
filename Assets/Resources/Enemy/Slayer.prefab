@@ -188,6 +188,7 @@ MonoBehaviour:
       m_Bits: 1024
     attackPoint: {fileID: 3060849835690409367}
     attackArea: 0.3
+    damage: 2
     getHit: 0
     shader: {fileID: 3060849834574278815}
     currCD: 0

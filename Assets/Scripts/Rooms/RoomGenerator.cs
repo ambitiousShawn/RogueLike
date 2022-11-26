@@ -32,6 +32,9 @@ public class RoomGenerator : MonoBehaviour
     private List<Room> rooms = new List<Room>();
     //房间图层
     public LayerMask roomLayer;
+    //Boss房对象
+    [HideInInspector]
+    public GameObject boss;
     #endregion
 
     void Start()
@@ -103,8 +106,18 @@ public class RoomGenerator : MonoBehaviour
             //为当前房间设置门
             SetupDoor(room);
         }
+        //重置Boss房生成点
+        if (!endRoom.GetComponent<Room>().roomLeft)
+            generatorPoint.position = endRoom.position + new Vector3(-XOffset, 0,0);
+        else if (!endRoom.GetComponent<Room>().roomRight)
+            generatorPoint.position = endRoom.position + new Vector3(XOffset, 0, 0);
+        else if (!endRoom.GetComponent<Room>().roomUp)
+            generatorPoint.position = endRoom.position + new Vector3(0, YOffset, 0);
+        else if (!endRoom.GetComponent<Room>().roomUp)
+            generatorPoint.position = endRoom.position + new Vector3(0, -YOffset, 0);
+
         //================Boss房生成逻辑===================
-        GameObject boss = Instantiate(Resources.Load<GameObject>("Room/BasicRoom"), generatorPoint.position, Quaternion.identity);
+        boss = Instantiate(Resources.Load<GameObject>("Room/BasicRoom"), generatorPoint.position, Quaternion.identity);
         //设置位置信息
         boss.transform.SetParent(generatorPoint.parent);
         //添加进列表
@@ -112,10 +125,13 @@ public class RoomGenerator : MonoBehaviour
         //设置Boss房和末尾房的房间门的显隐
         SetupDoor(boss.GetComponent<Room>());
         SetupDoor(endRoom.GetComponent<Room>());
-        foreach (var s in boss.GetComponentsInChildren<SpriteRenderer>())
-            s.color = Color.red;
+        
+        foreach (var s in endRoom.GetComponentsInChildren<SpriteRenderer>())
+            if (s.tag.StartsWith("Door_"))
+                s.color = Color.red;
         //TODO:生成Boss房间的预设
-
+        GameManager.Instance.boss = Instantiate(Resources.Load<GameObject>("Items/4" + "/Cyclops"), boss.transform.position, Quaternion.identity, PutItemsInRoom);
+        GameManager.Instance.boss.name = "Cyclops";
     }
 
     //生成随机预设的方法逻辑
@@ -146,7 +162,8 @@ public class RoomGenerator : MonoBehaviour
 
     void Update()
     {
-
+        if (boss.GetComponent<Room>().IsArrived)
+            GameManager.Instance.isArrive = true;
     }
 
     //随机生成下一个房间的位置(注意避免重复)

@@ -145,7 +145,7 @@ public class ChaseState : IState
         //追击时敌人朝向玩家
         manager.FlipTo(parameter.player);
 
-        //检测是否受伤
+        //检测是否受伤（加僵直）
         if (parameter.getHit)
         {
             manager.TransitionState(StateType.Hit);

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*
     游戏进程的管理
@@ -29,6 +30,10 @@ public class GameManager : MonoBehaviour
 
     //玩家是否死亡
     public bool isDead;
+    //玩家是否到达Boss房
+    public bool isArrive;
+    //Boss对象
+    public GameObject boss;
 
     #region 收集物相关
     public int money = 0;
@@ -53,6 +58,12 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        //测试随机地图
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            SceneManager.LoadScene(0);
+        }
+
         if (enemyNum <= 0)
         {
             isSucceed = true;

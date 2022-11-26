@@ -42,10 +42,8 @@ public class PoolManager : Singleton<PoolManager>
         }
         else
         {
-            //当没有想要的元素时
-            Debug.Log(name);
             res = ResourcesManager.Instance.Load<GameObject>(name);
-            Debug.Log(res);
+            //Debug.Log(res);
             res.name = name;
             
         }

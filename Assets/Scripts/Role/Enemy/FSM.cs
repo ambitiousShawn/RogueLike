@@ -32,6 +32,7 @@ public class Parameter
     public LayerMask targetLayer;
     public Transform attackPoint;
     public float attackArea;
+    public int damage;
 
     //µĞÈËÊÇ·ñ±»¹¥»÷
     public bool getHit;
@@ -140,7 +141,7 @@ public class FSM : MonoBehaviour
     {
         if (parameter.player != null )
         {
-            parameter.player.GetComponent<PlayerInteraction>().Wound(2);
+            parameter.player.GetComponent<PlayerInteraction>().Wound(parameter.damage);
         }
     }
     #endregion
