@@ -8,9 +8,6 @@ public class PlayerInteraction : MonoBehaviour
     private float XOffset, YOffset;
     //动画组件
     private Animator anim;
-    //蓄力UI
-    [HideInInspector]
-    public GamePanel gamePanel;
     //开火点坐标
     private Transform firePoint;
 
@@ -57,21 +54,25 @@ public class PlayerInteraction : MonoBehaviour
     {
         InputManager.Instance.SwitchState(true);
         EventManager.Instance.AddEventListener<KeyCode>("KeyDown", CheckKeyDown);
-        EventManager.Instance.AddEventListener<KeyCode>("KeyUp", CheckKeyUp);    
+        EventManager.Instance.AddEventListener<KeyCode>("KeyUp", CheckKeyUp);
+        /* UIManager.Instance.ShowPanel<GamePanel>("GamePanel", (panel) =>
+         {
+             gamePanel = panel;
+         });*/
     }
 
     void Start()
     {
+        
         //组件赋值
         anim = GetComponent<Animator>();
 
-        UIManager.Instance.ShowPanel<GamePanel>("GamePanel", (panel) =>
-        {
-            gamePanel = panel;
-        });
-
         XOffset = 16;
         YOffset = 12;
+
+        //Bug记录：由于gamePanel是异步加载，至少需要一帧时间加载，无法放在Start里面赋值
+        //gamePanel = GameManager.Instance.gamePanel;
+        //print(gamePanel);
 
         //找到开火点
         firePoint = transform.Find("firePoint");
@@ -148,8 +149,8 @@ public class PlayerInteraction : MonoBehaviour
         
         //更新蓄力时间UI
         //Bug记录：不加非空判断会报空指针(异步加载的先后性)
-        if (gamePanel != null)
-            gamePanel.UpdateBarState(currTimer , HitTimer);
+        if (GameManager.Instance.gamePanel != null)
+            GameManager.Instance.gamePanel.UpdateBarState(currTimer , HitTimer);
     }
 
     //检测键盘按下
@@ -171,7 +172,7 @@ public class PlayerInteraction : MonoBehaviour
             currCD = 0;
             anim.SetTrigger("Atk1");
             //显示进度条
-            gamePanel.SwitchBarState(true);
+            GameManager.Instance.gamePanel.SwitchBarState(true);
             Jtrigger = true;
         }
 
@@ -190,13 +191,13 @@ public class PlayerInteraction : MonoBehaviour
                 currCD = 0;
                 anim.SetTrigger("Shoot");
             }
-            gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
+            GameManager.Instance.gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
         }
 
         //扔炸弹
         if (keycode == KeyCode.E && currCD >= playerInfo.AtkCD)
         {
-            if (GameManager.Instance.bomb > 0)
+            if (DataManager.Instance.bomb > 0)
             {
                 //在玩家位置生成一枚炸弹，播放默认动画
                 GameObject bomb = ResourcesManager.Instance.Load<GameObject>("Collections/Bomb");
@@ -204,16 +205,16 @@ public class PlayerInteraction : MonoBehaviour
                 bomb.GetComponent<Animator>().enabled = true;
                 bomb.GetComponent<Collider2D>().enabled = false;
                 //背包里数量减一
-                gamePanel.UpdateCollections(-1);
+                GameManager.Instance.gamePanel.UpdateCollections(-1);
             }
             
         }
 
         //吃鸡腿
-        if (keycode == KeyCode.R && currHealth < playerInfo.Health && GameManager.Instance.chicken > 0)
+        if (keycode == KeyCode.R && currHealth < playerInfo.Health && DataManager.Instance.chicken > 0)
         {
             //背包物体减1
-            gamePanel.UpdateCollections(0, 0, 0, -1);
+            GameManager.Instance.gamePanel.UpdateCollections(0, 0, 0, -1);
 
             //回血逻辑
             currHealth += 3;
@@ -221,7 +222,21 @@ public class PlayerInteraction : MonoBehaviour
             {
                 currHealth = playerInfo.Health;
             }
-            gamePanel.UpdateBloodBar(currHealth, playerInfo.Health);
+            GameManager.Instance.gamePanel.UpdateBloodBar(currHealth, playerInfo.Health);
+        }
+
+        //弹出设置面板
+        if (keycode == KeyCode.Escape)
+        {
+            if (UIManager.Instance.GetPanel<InstructionPanel>("InstructionPanel") != null)
+            {
+                UIManager.Instance.HidePanel("InstructionPanel");
+                UIManager.Instance.ShowPanel<SettingPanel>("SettingPanel");
+            }
+            else if (UIManager.Instance.GetPanel<SettingPanel>("SettingPanel") != null)
+                UIManager.Instance.HidePanel("SettingPanel");
+            else
+                UIManager.Instance.ShowPanel<SettingPanel>("SettingPanel");
         }
 
         //Test:切换武器，方便测试，后续需要删除
@@ -230,28 +245,28 @@ public class PlayerInteraction : MonoBehaviour
             GameManager.Instance.weaponNum = 0;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
             currBullet = weaponInfo.BulletNum;
-            gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
+            GameManager.Instance.gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
         }
         else if (keycode == KeyCode.Alpha2)
         {
             GameManager.Instance.weaponNum = 1;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
             currBullet = weaponInfo.BulletNum;
-            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
+            GameManager.Instance.gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
         }
         else if (keycode == KeyCode.Alpha3)
         {
             GameManager.Instance.weaponNum = 2;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
             currBullet = weaponInfo.BulletNum;
-            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
+            GameManager.Instance.gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
         }
         else if (keycode == KeyCode.Alpha4)
         {
             GameManager.Instance.weaponNum = 3;
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
             currBullet = weaponInfo.BulletNum;
-            gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
+            GameManager.Instance.gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
         }
     }
 
@@ -262,7 +277,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             anim.SetBool("isCombo", false);
             //隐藏进度条
-            gamePanel.SwitchBarState(false);
+            GameManager.Instance.gamePanel.SwitchBarState(false);
             Jtrigger = false;
         }
     }
@@ -278,7 +293,7 @@ public class PlayerInteraction : MonoBehaviour
             currHealth = 0;
             GameManager.Instance.isDead = true;
         }
-        gamePanel.UpdateBloodBar(currHealth, playerInfo.Health);
+        GameManager.Instance.gamePanel.UpdateBloodBar(currHealth, playerInfo.Health);
 
         //受击变红
         GetComponent<SpriteRenderer>().color = Color.red;
@@ -340,7 +355,7 @@ public class PlayerInteraction : MonoBehaviour
 
             weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
             currBullet = weaponInfo.BulletNum;
-            gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
+            GameManager.Instance.gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
 
             //切换开启宝箱贴图
             collision.GetComponent<SpriteRenderer>().sprite = ResourcesManager.Instance.Load<Sprite>("Room/宝箱");

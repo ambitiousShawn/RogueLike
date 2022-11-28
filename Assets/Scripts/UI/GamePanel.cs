@@ -48,6 +48,8 @@ public class GamePanel : BasePanel
         UpdateBloodBar(GameManager.Instance.player.Health, GameManager.Instance.player.Health);
         //初始化收集物UI
         UpdateCollections(0, 0, 0, 0);
+
+        DontDestroyOnLoad(gameObject);
     }
 
     //开始蓄力更新进度条状态
@@ -96,14 +98,14 @@ public class GamePanel : BasePanel
     //更新收集物信息(炸弹，钥匙，金币，鸡腿)
     public void UpdateCollections(int bombNum = 0,int keyNum = 0,int moneyNum = 0,int chicken = 0)
     {
-        GameManager.Instance.bomb += bombNum;
-        GameManager.Instance.key += keyNum;
-        GameManager.Instance.money += moneyNum;
-        GameManager.Instance.chicken += chicken;
-        Txt_BombNum.text = GameManager.Instance.bomb .ToString();
-        Txt_KeyNum.text = GameManager.Instance.key .ToString();
-        Txt_MoneyNum.text = GameManager.Instance.money .ToString();
-        Txt_Chicken.text = GameManager.Instance.chicken .ToString();
+        DataManager.Instance.bomb += bombNum;
+        DataManager.Instance.key += keyNum;
+        DataManager.Instance.goldCoin += moneyNum;
+        DataManager.Instance.chicken += chicken;
+        Txt_BombNum.text = DataManager.Instance.bomb .ToString();
+        Txt_KeyNum.text = DataManager.Instance.key .ToString();
+        Txt_MoneyNum.text = DataManager.Instance.goldCoin .ToString();
+        Txt_Chicken.text = DataManager.Instance.chicken .ToString();
     }
 
 }

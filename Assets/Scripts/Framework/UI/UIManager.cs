@@ -25,6 +25,9 @@ public class UIManager : Singleton<UIManager>
     {
         canvas = GameObject.Find("Canvas").transform;
         eventSystem = GameObject.Find("EventSystem").transform;
+
+        GameObject.DontDestroyOnLoad(canvas.gameObject);
+        GameObject.DontDestroyOnLoad(eventSystem.gameObject);
     }
 
     //显示某面板
@@ -54,13 +57,15 @@ public class UIManager : Singleton<UIManager>
             
 
             T panel = obj.GetComponent<T>();
-            if (callback != null)
-                callback(panel);
+            
 
             //显示面板
             panel.ShowSelf();
             //存储面板
             panelDic.Add(panelName, panel);
+
+            if (callback != null)
+                callback(panel);
         });
     }
 

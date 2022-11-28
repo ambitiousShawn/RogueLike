@@ -144,6 +144,7 @@ public class FSM : MonoBehaviour
             parameter.player.GetComponent<PlayerInteraction>().Wound(parameter.damage);
         }
     }
+
     #endregion
 
     private void OnDrawGizmos()

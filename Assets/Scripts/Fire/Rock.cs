@@ -8,15 +8,16 @@ public class Rock : MonoBehaviour
     private Vector3 dir;
     //飞行速度
     private float speed = 8 ;
-    private Transform currPlayerPos;
+    private GameObject currPlayerPos;
     private Transform throwPoint;
     private void OnEnable()
     {
-        currPlayerPos = GameObject.Find("Player").transform;
+        currPlayerPos = GameManager.Instance.playerObj;
         //投掷点
+        print(GameManager.Instance.boss);
         throwPoint = GameManager.Instance.boss.transform.Find("ThrowPoint");
         transform.position = throwPoint.position;
-        dir = (currPlayerPos.position - throwPoint.position).normalized;
+        dir = (currPlayerPos.transform.position - throwPoint.position).normalized;
         Invoke("delayPut", 3);
     }
 

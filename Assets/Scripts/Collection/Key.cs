@@ -11,7 +11,7 @@ public class Key : MonoBehaviour
     {
 
         //Ê°È¡Âß¼­
-        gamePanel = GameManager.Instance.playerObj.GetComponent<PlayerInteraction>().gamePanel;
+        gamePanel = GameManager.Instance.gamePanel;
         if (collision.gameObject.CompareTag("Player"))
         {
             gamePanel.UpdateCollections(0,1);

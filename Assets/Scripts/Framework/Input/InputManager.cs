@@ -24,6 +24,7 @@ public class InputManager : Singleton<InputManager>
         CheckKey(KeyCode.K);
         CheckKey(KeyCode.E);
         CheckKey(KeyCode.R);
+        CheckKey(KeyCode.Escape);
         CheckKey(KeyCode.Alpha1);
         CheckKey(KeyCode.Alpha2);
         CheckKey(KeyCode.Alpha3);

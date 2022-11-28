@@ -46,9 +46,20 @@ public class Wind : FlyableFire
         //子弹碰到怪物，对怪物造成伤害，并销毁子弹，部分武器可产生特效
         if (collision.CompareTag("Enemy"))
         {
+            //转换敌人的受伤状态
             FSM fsm = collision.GetComponent<FSM>();
-            fsm.Hit(info.Damage);
-            fsm.parameter.getHit = true;
+            FSM_Boss fsm_boss = collision.GetComponent<FSM_Boss>();
+            if (fsm != null)
+            {
+                fsm.parameter.getHit = true;
+                //伤害值后期读表
+                fsm.Hit(info.Damage);
+            }
+            else
+            {
+                fsm_boss.parameter.getHit = true;
+                fsm_boss.Hit(info.Damage);
+            }
 
             //龙卷风碰到敌人，停止运动，并且持续吸引周围的敌人
             isArrived = true;

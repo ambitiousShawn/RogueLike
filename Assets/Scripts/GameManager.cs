@@ -7,13 +7,8 @@ using UnityEngine.SceneManagement;
     游戏进程的管理
  */
 
-public class GameManager : MonoBehaviour
+public class GameManager : SingletonMono<GameManager>
 {
-    #region 单例模式
-    private static GameManager instance;
-    public static GameManager Instance => instance;
-    #endregion
-
     //当前关卡是否可以过关
     public bool isSucceed;
     //当前关卡剩余的怪物数量
@@ -24,9 +19,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject playerObj;
     //当前玩家选择的角色
-    public int num;
+    public int num = 1;
     //当前玩家选择的武器
-    public int weaponNum;
+    public int weaponNum = 2;
 
     //玩家是否死亡
     public bool isDead;
@@ -34,35 +29,64 @@ public class GameManager : MonoBehaviour
     public bool isArrive;
     //Boss对象
     public GameObject boss;
-
-    #region 收集物相关
-    public int money = 0;
-    public int key = 0;
-    public int bomb = 0;
-    public int chicken = 0;
-    #endregion
+    //游戏UI界面
+    public GamePanel gamePanel;
+    //提示UI
+    public TipsPanel tipsPanel;
 
     private void Awake()
     {
-        instance = this;
         player = DataManager.Instance.playerInfos[num];
+        //Bug记录：初始化游戏面板放在Start中会报空！异步加载的延后性
+        InitPlayer();
+        UIManager.Instance.ShowPanel<GamePanel>("GamePanel", (panel) =>
+        {
+            gamePanel = panel;
+            //print("43行打印信息"+gamePanel);
+        });
+        
+        //print("46行打印信息"+gamePanel);
+        UIManager.Instance.ShowPanel<MiniMapPanel>("MiniMapPanel");
     }
 
     void Start()
     {
         enemyNum = 0;
-        UIManager.Instance.ShowPanel<MiniMapPanel>("MiniMapPanel");
         isDead = false;
-        Init();
+        UIManager.Instance.ShowPanel<TipsPanel>("TipsPanel", (panel) =>
+        {
+            tipsPanel = panel;
+        });
+
+        //播放BGM
+        AudioManager.Instance.PlayBGM("地下城");
     }
+
+
 
     void Update()
     {
         //测试随机地图
         if (Input.GetKeyDown(KeyCode.T))
         {
-            SceneManager.LoadScene(0);
+            ScenesManager.Instance.LoadSceneAsync("Level02",() =>
+            {
+                InitPlayer();
+                print(playerObj);
+            });
         }
+
+        //测试按键
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            tipsPanel.UpdateInfo("呜呜呜呜呜", 2f);
+        }
+        //当设置面板存在时，游戏暂停
+        if (UIManager.Instance.GetPanel<SettingPanel>("SettingPanel") != null ||
+            UIManager.Instance.GetPanel<InstructionPanel>("InstructionPanel") != null)
+            Time.timeScale = 0;
+        else
+            Time.timeScale = 1;
 
         if (enemyNum <= 0)
         {
@@ -75,8 +99,8 @@ public class GameManager : MonoBehaviour
 
     }
 
-    //初始化玩家的逻辑
-    private void Init()
+    //初始化玩家的逻辑(切换场景的时候重新调用)
+    public void InitPlayer()
     {
         playerObj = ResourcesManager.Instance.Load<GameObject>(player.Resource);
         playerObj.transform.position = Vector2.zero;

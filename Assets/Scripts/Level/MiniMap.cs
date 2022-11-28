@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class MiniMap : MonoBehaviour
 {
-    private Transform player;
+    private GameObject player;
 
     void Update()
     {
-        player = GameObject.Find("Player").transform;
+        player = GameManager.Instance.playerObj;
         if (player != null)
         {
             //Íæ¼Ò×ø±ê
-            Vector3 pos = player.position;
+            Vector3 pos = player.transform.position;
             transform.position = new Vector3(pos.x,pos.y,-10);
         }
     }
