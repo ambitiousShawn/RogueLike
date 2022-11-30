@@ -22,6 +22,8 @@ public class GamePanel : BasePanel
     private Text Text_Health;
     //右上设置按钮
     private Button Btn_Settings;
+    //怪物剩余数量
+    private Text Txt_EnemyNum;
 
     protected override void Init()
     {
@@ -40,6 +42,7 @@ public class GamePanel : BasePanel
         Text_Health = GetControl<Text>("Text_Health");
 
         Btn_Settings = GetControl<Button>("Btn_Settings");
+        Txt_EnemyNum = GetControl<Text>("Txt_EnemyNum");
 
         SwitchBarState(false);
 
@@ -50,6 +53,8 @@ public class GamePanel : BasePanel
         UpdateCollections(0, 0, 0, 0);
         //初始化武器信息
         SwitchWeapon(999, 999);
+        //初始化怪物剩余
+        UpdateEnemyNum(0);
     }
 
     //开始蓄力更新进度条状态
@@ -108,4 +113,9 @@ public class GamePanel : BasePanel
         Txt_Chicken.text = DataManager.Instance.chicken .ToString();
     }
 
+    //更新剩余怪物数量信息
+    public void UpdateEnemyNum(int num)
+    {
+        Txt_EnemyNum.text = "当前房间剩余怪物：" + num;
+    }
 }

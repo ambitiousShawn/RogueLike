@@ -497,8 +497,6 @@ MonoBehaviour:
   isSucceed: 0
   enemyNum: 0
   playerObj: {fileID: 0}
-  num: 1
-  weaponNum: 2
   isDead: 0
   isArrive: 0
   boss: {fileID: 0}
@@ -536,8 +534,6 @@ MonoBehaviour:
   isSucceed: 0
   enemyNum: 0
   playerObj: {fileID: 0}
-  num: 0
-  weaponNum: 2
   isDead: 0
   isArrive: 0
   boss: {fileID: 0}

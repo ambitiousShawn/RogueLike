@@ -331,6 +331,9 @@ public class DeathState : IState
     {
         parameter.anim.Play("Death");
         GameObject.Destroy(manager.gameObject,5f);
+        //怪物死亡，使当前房间预设剩余怪物数量-1
+        //更新剩余怪物UI
+        LevelManager.Instance.gamePanel.UpdateEnemyNum(--LevelManager.Instance.enemyNum);
     }
 
     public void OnExit()

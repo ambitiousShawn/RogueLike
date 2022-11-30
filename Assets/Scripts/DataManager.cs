@@ -50,6 +50,8 @@ public class DataManager
     public int role;
     //当前玩家使用的武器编号
     public int weapon;
+    //每个房间的怪物数量
+    public int[] enemyNums = new int[] { 0, 2, 4, 2, 1, 1, 2 };
     #endregion
 
     public DataManager()

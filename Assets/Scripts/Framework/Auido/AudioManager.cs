@@ -16,10 +16,11 @@ public class AudioManager : Singleton<AudioManager>
     public AudioManager()
     {
         GameObject bgm = GameObject.Find("Audio");
-        if (bgm != null)
-            BGM_Audio = bgm.AddComponent<AudioSource>();
-
-        GameObject.DontDestroyOnLoad(bgm);
+        if (bgm == null)
+            bgm = new GameObject("Audio");
+        BGM_Audio = bgm.AddComponent<AudioSource>();
+            
+        //GameObject.DontDestroyOnLoad(bgm);
 
         //加入帧更新测试，如果音效播放完成则删除组件
         MonoManager.Instance.AddUpdateListener(() =>

@@ -185,7 +185,10 @@ public class PlayerInteraction : MonoBehaviour
             if (currBullet < 0)
             {
                 currBullet = 0;
-                //TODO:后续可播放卡膛音效
+                //子弹打完后自动切换为默认武器
+                DataManager.Instance.weapon = 0;
+                currBullet = 999;
+                weaponInfo = DataManager.Instance.weaponInfos[0];
             }
             else
             {
@@ -345,6 +348,10 @@ public class PlayerInteraction : MonoBehaviour
         if (collision.CompareTag("Room") && !collision.transform.GetComponent<Room>().IsArrived)
         {
             Room currRoom = collision.transform.GetComponent<Room>();
+            //到达一个房间，给其剩余怪物数量赋值
+            LevelManager.Instance.enemyNum = DataManager.Instance.enemyNums[currRoom.currItems];
+            //更新UI
+            LevelManager.Instance.gamePanel.UpdateEnemyNum(LevelManager.Instance.enemyNum);
             currRoom.IsArrived = true;
         }
 

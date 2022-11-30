@@ -43,10 +43,10 @@ public class MainPanel : BasePanel
         //选择英雄按钮，切换选择英雄下选框的显示与否
         Btn_Choose.onClick.AddListener(() =>
         {
-            //if (Dropdown_ChooseHero)
-                Dropdown_ChooseHero.enabled = false;
-/*            else
-                Dropdown_ChooseHero.Show();*/
+            if (Dropdown_ChooseHero.gameObject.activeInHierarchy)
+                Dropdown_ChooseHero.gameObject.SetActive(false);
+            else
+                Dropdown_ChooseHero.gameObject.SetActive(true);
         });
 
         //设置面板，点击弹出设置并隐藏主面板即可
@@ -56,7 +56,7 @@ public class MainPanel : BasePanel
             UIManager.Instance.HidePanel("MainPanel",false);
         });
 
-        //关于，后期设计关于面板再添加功能
+        //TODO:关于，后期设计关于面板再添加功能
         Btn_About.onClick.AddListener(() =>
         {
             print("About被点击啦！");

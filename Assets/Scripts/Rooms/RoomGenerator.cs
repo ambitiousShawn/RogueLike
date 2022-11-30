@@ -38,7 +38,7 @@ public class RoomGenerator : MonoBehaviour
     #endregion
 
     void Start()
-    {
+    { 
         //生成位置初始化
         generatorPoint = transform;
         //位置偏移量初始化
@@ -70,7 +70,17 @@ public class RoomGenerator : MonoBehaviour
                 if (!currItem[randType, randNum])
                 {
                     Instantiate(Resources.Load<GameObject>("Items/" + randType + "/Items" + randNum), generatorPoint.position, Quaternion.identity, PutItemsInRoom);
+                    //将当前预设设置为已生成，确保下次不会生成该预设
                     currItem[randType, randNum] = true;
+                    if (randType == 3)
+                    {
+                        obj.GetComponent<Room>().currItems = randNum;
+                    }
+                    else
+                    {
+                        obj.GetComponent<Room>().currItems = 0;
+                    }
+                        
                     break;
                 }
                 else

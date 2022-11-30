@@ -13,6 +13,9 @@ public class Room : MonoBehaviour
     private GameObject mini;
     //该房间是否被探索过
     private bool isArrived;
+    //当前房间绑定的预设(仅仅适用有怪物的房间预设)
+    public int currItems = 0;
+
     public bool IsArrived
     {
         get { return isArrived; }
