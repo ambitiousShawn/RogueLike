@@ -17,7 +17,7 @@ public class Bomb_Unpicked : MonoBehaviour
     {
 
         //Ê°È¡Âß¼­
-        gamePanel = GameManager.Instance.gamePanel;
+        gamePanel = LevelManager.Instance.gamePanel;
         if (collision.gameObject.CompareTag("Player"))
         {
             gamePanel.UpdateCollections(1);

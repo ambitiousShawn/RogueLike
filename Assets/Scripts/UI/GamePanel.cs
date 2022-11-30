@@ -45,11 +45,11 @@ public class GamePanel : BasePanel
 
         //初始化血条UI
         InitPlayerHead();
-        UpdateBloodBar(GameManager.Instance.player.Health, GameManager.Instance.player.Health);
+        UpdateBloodBar(LevelManager.Instance.player.Health, LevelManager.Instance.player.Health);
         //初始化收集物UI
         UpdateCollections(0, 0, 0, 0);
-
-        DontDestroyOnLoad(gameObject);
+        //初始化武器信息
+        SwitchWeapon(999, 999);
     }
 
     //开始蓄力更新进度条状态
@@ -77,13 +77,13 @@ public class GamePanel : BasePanel
         //更新弹夹数
         Text_BulletNum.text = currNum + " / " + maxNum;
         //更新右下图标(改为加载资源文件)
-        currWeapon.sprite = Resources.Load<Sprite>(DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum].UISprite);
+        currWeapon.sprite = Resources.Load<Sprite>(DataManager.Instance.weaponInfos[DataManager.Instance.weapon].UISprite);
     }
 
     //初始化角色头像
     public void InitPlayerHead()
     {
-        Img_RoleHead.sprite = Resources.Load<Sprite>(GameManager.Instance.player.UISprite);
+        Img_RoleHead.sprite = Resources.Load<Sprite>(LevelManager.Instance.player.UISprite);
     }
 
     //更新角色信息(血量)

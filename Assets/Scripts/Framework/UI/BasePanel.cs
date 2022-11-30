@@ -36,6 +36,7 @@ public abstract class BasePanel : MonoBehaviour
         FindChildrenControl<ScrollRect>();
         FindChildrenControl<Slider>();
         FindChildrenControl<Scrollbar>();
+        FindChildrenControl<Dropdown>();
 
         //获取控制透明度的组件
         canvasGroup = GetComponent<CanvasGroup>();

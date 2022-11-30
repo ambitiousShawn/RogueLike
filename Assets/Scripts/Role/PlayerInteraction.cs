@@ -50,20 +50,8 @@ public class PlayerInteraction : MonoBehaviour
     //存储特效的列表
     private List<GameObject> list = new List<GameObject>();
 
-    private void Awake()
-    {
-        InputManager.Instance.SwitchState(true);
-        EventManager.Instance.AddEventListener<KeyCode>("KeyDown", CheckKeyDown);
-        EventManager.Instance.AddEventListener<KeyCode>("KeyUp", CheckKeyUp);
-        /* UIManager.Instance.ShowPanel<GamePanel>("GamePanel", (panel) =>
-         {
-             gamePanel = panel;
-         });*/
-    }
-
     void Start()
     {
-        
         //组件赋值
         anim = GetComponent<Animator>();
 
@@ -89,8 +77,8 @@ public class PlayerInteraction : MonoBehaviour
         atk2Range = 0.7f;
         atk3Range = 3f;
 
-        playerInfo = DataManager.Instance.playerInfos[GameManager.Instance.num];
-        weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+        playerInfo = DataManager.Instance.playerInfos[DataManager.Instance.role];
+        weaponInfo = DataManager.Instance.weaponInfos[DataManager.Instance.weapon];
         //cd计数器初始化
         currCD = playerInfo.AtkCD;
         //血量初始化
@@ -101,9 +89,22 @@ public class PlayerInteraction : MonoBehaviour
         currBullet = weaponInfo.BulletNum;
     }
 
+    private void OnEnable()
+    {
+        InputManager.Instance.SwitchState(true);
+        EventManager.Instance.AddEventListener<KeyCode>("KeyDown", CheckKeyDown);
+        EventManager.Instance.AddEventListener<KeyCode>("KeyUp", CheckKeyUp);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveEventListener<KeyCode>("KeyDown", CheckKeyDown);
+        EventManager.Instance.RemoveEventListener<KeyCode>("KeyUp", CheckKeyUp);
+    }
+
     void Update()
     {
-        if (GameManager.Instance.isDead)
+        if (LevelManager.Instance.isDead)
         {
             anim.SetBool("isDead", true);
             InputManager.Instance.SwitchState(false);
@@ -149,8 +150,8 @@ public class PlayerInteraction : MonoBehaviour
         
         //更新蓄力时间UI
         //Bug记录：不加非空判断会报空指针(异步加载的先后性)
-        if (GameManager.Instance.gamePanel != null)
-            GameManager.Instance.gamePanel.UpdateBarState(currTimer , HitTimer);
+        if (LevelManager.Instance.gamePanel != null)
+            LevelManager.Instance.gamePanel.UpdateBarState(currTimer , HitTimer);
     }
 
     //检测键盘按下
@@ -172,7 +173,7 @@ public class PlayerInteraction : MonoBehaviour
             currCD = 0;
             anim.SetTrigger("Atk1");
             //显示进度条
-            GameManager.Instance.gamePanel.SwitchBarState(true);
+            LevelManager.Instance.gamePanel.SwitchBarState(true);
             Jtrigger = true;
         }
 
@@ -191,7 +192,7 @@ public class PlayerInteraction : MonoBehaviour
                 currCD = 0;
                 anim.SetTrigger("Shoot");
             }
-            GameManager.Instance.gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
+            LevelManager.Instance.gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
         }
 
         //扔炸弹
@@ -205,7 +206,7 @@ public class PlayerInteraction : MonoBehaviour
                 bomb.GetComponent<Animator>().enabled = true;
                 bomb.GetComponent<Collider2D>().enabled = false;
                 //背包里数量减一
-                GameManager.Instance.gamePanel.UpdateCollections(-1);
+                LevelManager.Instance.gamePanel.UpdateCollections(-1);
             }
             
         }
@@ -214,7 +215,7 @@ public class PlayerInteraction : MonoBehaviour
         if (keycode == KeyCode.R && currHealth < playerInfo.Health && DataManager.Instance.chicken > 0)
         {
             //背包物体减1
-            GameManager.Instance.gamePanel.UpdateCollections(0, 0, 0, -1);
+            LevelManager.Instance.gamePanel.UpdateCollections(0, 0, 0, -1);
 
             //回血逻辑
             currHealth += 3;
@@ -222,7 +223,7 @@ public class PlayerInteraction : MonoBehaviour
             {
                 currHealth = playerInfo.Health;
             }
-            GameManager.Instance.gamePanel.UpdateBloodBar(currHealth, playerInfo.Health);
+            LevelManager.Instance.gamePanel.UpdateBloodBar(currHealth, playerInfo.Health);
         }
 
         //弹出设置面板
@@ -242,31 +243,31 @@ public class PlayerInteraction : MonoBehaviour
         //Test:切换武器，方便测试，后续需要删除
         if (keycode == KeyCode.Alpha1)
         {
-            GameManager.Instance.weaponNum = 0;
-            weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            DataManager.Instance.weapon = 0;
+            weaponInfo = DataManager.Instance.weaponInfos[DataManager.Instance.weapon];
             currBullet = weaponInfo.BulletNum;
-            GameManager.Instance.gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
+            LevelManager.Instance.gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
         }
         else if (keycode == KeyCode.Alpha2)
         {
-            GameManager.Instance.weaponNum = 1;
-            weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            DataManager.Instance.weapon = 1;
+            weaponInfo = DataManager.Instance.weaponInfos[DataManager.Instance.weapon];
             currBullet = weaponInfo.BulletNum;
-            GameManager.Instance.gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
+            LevelManager.Instance.gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
         }
         else if (keycode == KeyCode.Alpha3)
         {
-            GameManager.Instance.weaponNum = 2;
-            weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            DataManager.Instance.weapon = 2;
+            weaponInfo = DataManager.Instance.weaponInfos[DataManager.Instance.weapon];
             currBullet = weaponInfo.BulletNum;
-            GameManager.Instance.gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
+            LevelManager.Instance.gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
         }
         else if (keycode == KeyCode.Alpha4)
         {
-            GameManager.Instance.weaponNum = 3;
-            weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            DataManager.Instance.weapon = 3;
+            weaponInfo = DataManager.Instance.weaponInfos[DataManager.Instance.weapon];
             currBullet = weaponInfo.BulletNum;
-            GameManager.Instance.gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
+            LevelManager.Instance.gamePanel.SwitchWeapon(weaponInfo.BulletNum, weaponInfo.BulletNum);
         }
     }
 
@@ -277,7 +278,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             anim.SetBool("isCombo", false);
             //隐藏进度条
-            GameManager.Instance.gamePanel.SwitchBarState(false);
+            LevelManager.Instance.gamePanel.SwitchBarState(false);
             Jtrigger = false;
         }
     }
@@ -291,9 +292,9 @@ public class PlayerInteraction : MonoBehaviour
         if (currHealth <= 0)
         {
             currHealth = 0;
-            GameManager.Instance.isDead = true;
+            LevelManager.Instance.isDead = true;
         }
-        GameManager.Instance.gamePanel.UpdateBloodBar(currHealth, playerInfo.Health);
+        LevelManager.Instance.gamePanel.UpdateBloodBar(currHealth, playerInfo.Health);
 
         //受击变红
         GetComponent<SpriteRenderer>().color = Color.red;
@@ -310,7 +311,7 @@ public class PlayerInteraction : MonoBehaviour
     #region 触发器相关
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag.StartsWith("Door_") && GameManager.Instance.isSucceed)
+        if (collision.tag.StartsWith("Door_") && LevelManager.Instance.isSucceed)
         {
             
             //拿到当前房间坐标
@@ -351,11 +352,11 @@ public class PlayerInteraction : MonoBehaviour
         if (collision.CompareTag("Weapon"))
         {
             //随机生成一个武器编号
-            GameManager.Instance.weaponNum = Random.Range(1, 4);
+            DataManager.Instance.weapon = Random.Range(1, 4);
 
-            weaponInfo = DataManager.Instance.weaponInfos[GameManager.Instance.weaponNum];
+            weaponInfo = DataManager.Instance.weaponInfos[DataManager.Instance.weapon];
             currBullet = weaponInfo.BulletNum;
-            GameManager.Instance.gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
+            LevelManager.Instance.gamePanel.SwitchWeapon(currBullet, weaponInfo.BulletNum);
 
             //切换开启宝箱贴图
             collision.GetComponent<SpriteRenderer>().sprite = ResourcesManager.Instance.Load<Sprite>("Room/宝箱");

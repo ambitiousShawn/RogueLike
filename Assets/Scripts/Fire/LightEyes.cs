@@ -13,7 +13,7 @@ public class LightEyes : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            GameManager.Instance.playerObj.GetComponent<PlayerInteraction>().Wound(4);
+            LevelManager.Instance.playerObj.GetComponent<PlayerInteraction>().Wound(4);
             
         }
     }

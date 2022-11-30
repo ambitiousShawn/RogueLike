@@ -7,8 +7,25 @@ using UnityEngine.SceneManagement;
     游戏进程的管理
  */
 
-public class GameManager : SingletonMono<GameManager>
+public class LevelManager : MonoBehaviour
 {
+    #region 单例模式
+    private static LevelManager instance;
+    public static LevelManager Instance => instance;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+    #endregion
+
     //当前关卡是否可以过关
     public bool isSucceed;
     //当前关卡剩余的怪物数量
@@ -18,10 +35,6 @@ public class GameManager : SingletonMono<GameManager>
     public PlayerInfo player;
 
     public GameObject playerObj;
-    //当前玩家选择的角色
-    public int num = 1;
-    //当前玩家选择的武器
-    public int weaponNum = 2;
 
     //玩家是否死亡
     public bool isDead;
@@ -34,9 +47,11 @@ public class GameManager : SingletonMono<GameManager>
     //提示UI
     public TipsPanel tipsPanel;
 
-    private void Awake()
+    void Start()
     {
-        player = DataManager.Instance.playerInfos[num];
+        print("Start执行力");
+        print(DataManager.Instance.role);
+        player = DataManager.Instance.playerInfos[DataManager.Instance.role];
         //Bug记录：初始化游戏面板放在Start中会报空！异步加载的延后性
         InitPlayer();
         UIManager.Instance.ShowPanel<GamePanel>("GamePanel", (panel) =>
@@ -44,15 +59,10 @@ public class GameManager : SingletonMono<GameManager>
             gamePanel = panel;
             //print("43行打印信息"+gamePanel);
         });
-        
+
         //print("46行打印信息"+gamePanel);
         UIManager.Instance.ShowPanel<MiniMapPanel>("MiniMapPanel");
-    }
 
-    void Start()
-    {
-        enemyNum = 0;
-        isDead = false;
         UIManager.Instance.ShowPanel<TipsPanel>("TipsPanel", (panel) =>
         {
             tipsPanel = panel;

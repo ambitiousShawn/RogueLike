@@ -6,6 +6,6 @@ public class MiniMapPanel : BasePanel
 {
     protected override void Init()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 }

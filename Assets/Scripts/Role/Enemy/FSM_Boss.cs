@@ -85,8 +85,8 @@ public class FSM_Boss : MonoBehaviour
     {
         currState.OnUpdate();
         CoolDown();
-        if (GameManager.Instance.isArrive)
-            parameter.player = GameManager.Instance.playerObj.transform;
+        if (LevelManager.Instance.isArrive)
+            parameter.player = LevelManager.Instance.playerObj.transform;
     }
 
     //ÀäÈ´Âß¼­

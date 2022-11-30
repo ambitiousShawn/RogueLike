@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class AudioManager : Singleton<AudioManager>
 {
     //BGM组件
-    private AudioSource BGM_Audio = GameObject.Find("Audio").GetComponent<AudioSource>();
+    private AudioSource BGM_Audio ;
 
     //音效组件
     private GameObject Sound_Obj = GameObject.Find("Sound");
@@ -15,6 +15,12 @@ public class AudioManager : Singleton<AudioManager>
     //控制音效播放组件的移除
     public AudioManager()
     {
+        GameObject bgm = GameObject.Find("Audio");
+        if (bgm != null)
+            BGM_Audio = bgm.AddComponent<AudioSource>();
+
+        GameObject.DontDestroyOnLoad(bgm);
+
         //加入帧更新测试，如果音效播放完成则删除组件
         MonoManager.Instance.AddUpdateListener(() =>
         {

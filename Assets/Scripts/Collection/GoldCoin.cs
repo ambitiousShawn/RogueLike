@@ -11,7 +11,7 @@ public class GoldCoin : MonoBehaviour
     {
 
         //Ê°È¡Âß¼­
-        gamePanel = GameManager.Instance.gamePanel;
+        gamePanel = LevelManager.Instance.gamePanel;
         if (collision.gameObject.CompareTag("Player"))
         {
             if (gameObject.name.StartsWith("oneGoldCoin"))

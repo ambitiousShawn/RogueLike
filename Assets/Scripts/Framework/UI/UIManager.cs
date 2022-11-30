@@ -62,7 +62,8 @@ public class UIManager : Singleton<UIManager>
             //œ‘ æ√Ê∞Â
             panel.ShowSelf();
             //¥Ê¥¢√Ê∞Â
-            panelDic.Add(panelName, panel);
+            if (!panelDic.ContainsKey(panelName))
+                panelDic.Add(panelName, panel);
 
             if (callback != null)
                 callback(panel);

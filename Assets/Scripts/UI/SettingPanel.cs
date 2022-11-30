@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingPanel :BasePanel
@@ -24,6 +25,9 @@ public class SettingPanel :BasePanel
         Btn_Continue.onClick.AddListener(() =>
         {
             UIManager.Instance.HidePanel("SettingPanel");
+            //如果在场景一，还要加载出开始主面板
+            if (SceneManager.GetActiveScene().buildIndex == 0)
+                UIManager.Instance.ShowPanel<MainPanel>("MainPanel");
         });
 
         //操作面板

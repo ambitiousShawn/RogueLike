@@ -19,13 +19,13 @@ public class Player : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        info = DataManager.Instance.playerInfos[GameManager.Instance.num];
+        info = DataManager.Instance.playerInfos[DataManager.Instance.role];
         speed = info.MoveSpeed;
     }
 
     void FixedUpdate()
     {
-        if (GameManager.Instance.isDead) return;
+        if (LevelManager.Instance.isDead) return;
         Move();
     }
 

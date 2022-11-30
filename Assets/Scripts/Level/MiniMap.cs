@@ -8,7 +8,7 @@ public class MiniMap : MonoBehaviour
 
     void Update()
     {
-        player = GameManager.Instance.playerObj;
+        player = LevelManager.Instance.playerObj;
         if (player != null)
         {
             //Íæ¼Ò×ø±ê

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    该类从始至终不会被销毁，作为全局数据管理器使用。
+ */
+
 public class DataManager 
 {
 
@@ -39,6 +43,13 @@ public class DataManager
     public float BGM_Volume;
     //音效大小
     public float Sound_Volume;
+    #endregion
+
+    #region 玩家信息
+    //当前玩家选择的角色编号
+    public int role;
+    //当前玩家使用的武器编号
+    public int weapon;
     #endregion
 
     public DataManager()
