@@ -27,6 +27,7 @@ public enum StateType_Boss
 public class Parameter_Boss
 {
     public int health;
+    public int maxHealth;
     public int chaseSpeed;
     public Animator anim;
     //玩家目标
@@ -62,6 +63,8 @@ public class FSM_Boss : MonoBehaviour
     public Transform laserPoint;
     public Transform ThrowPoint;
 
+    //Boss是否死亡
+    private bool isDie;
     void Start()
     {
         states_boss.Add(StateType_Boss.Idle, new IdleState_Boss(this));
@@ -75,7 +78,6 @@ public class FSM_Boss : MonoBehaviour
 
         //设置初始状态为Idle
         TransitionState(StateType_Boss.Idle);
-
         //test
         //GameManager.Instance.isArrive = true;
     }
@@ -86,7 +88,26 @@ public class FSM_Boss : MonoBehaviour
         currState.OnUpdate();
         CoolDown();
         if (LevelManager.Instance.isArrive)
-            parameter.player = LevelManager.Instance.playerObj.transform;
+        {
+            if (parameter.health <= 0 && !isDie)
+            {
+                //如果Boss死亡，产生传送门，可让玩家传送至下一关
+                GameObject obj = ResourcesManager.Instance.Load<GameObject>("Room/Portal");
+                obj.transform.position = transform.position;
+                isDie = true;
+            }
+            else
+            {
+                parameter.player = LevelManager.Instance.playerObj.transform;
+                LevelManager.Instance.gamePanel.UpdateBossBar(true, parameter.health, parameter.maxHealth);
+                
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        LevelManager.Instance.gamePanel.UpdateBossBar(false);
     }
 
     //冷却逻辑

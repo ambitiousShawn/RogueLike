@@ -6,8 +6,9 @@ public class StartTest : MonoBehaviour
 {
     void Start()
     {
-        UIManager.Instance.ShowPanel<MainPanel>("MainPanel");
+        //UIManager.Instance.ShowPanel<MainPanel>("MainPanel");
         AudioManager.Instance.PlayBGM("µØÏÂ³Ç");
+        UIManager.Instance.ShowPanel<InstructionPanel>("InstructionPanel");
     }
 
     private void Update()

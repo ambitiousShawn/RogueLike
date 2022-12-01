@@ -140,8 +140,17 @@ public class RoomGenerator : MonoBehaviour
             if (s.tag.StartsWith("Door_"))
                 s.color = Color.red;
         //TODO:生成Boss房间的预设
-        LevelManager.Instance.boss = Instantiate(Resources.Load<GameObject>("Items/4" + "/Cyclops"), boss.transform.position, Quaternion.identity, PutItemsInRoom);
-        LevelManager.Instance.boss.name = "Cyclops";
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            LevelManager.Instance.boss = Instantiate(Resources.Load<GameObject>("Items/4" + "/Kun"), boss.transform.position, Quaternion.identity, PutItemsInRoom);
+            LevelManager.Instance.boss.name = "CXK";
+        }
+        else if (SceneManager.GetActiveScene().buildIndex == 2)
+        {
+            LevelManager.Instance.boss = Instantiate(Resources.Load<GameObject>("Items/4" + "/Cyclops"), boss.transform.position, Quaternion.identity, PutItemsInRoom);
+            LevelManager.Instance.boss.name = "Cyclops";
+        }
+       
     }
 
     //生成随机预设的方法逻辑

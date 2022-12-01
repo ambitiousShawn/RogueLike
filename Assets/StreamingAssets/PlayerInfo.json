@@ -2,7 +2,7 @@
     {
         "ID": 1,
         "Resource": "Player/1",
-        "BaseAtk": 2,
+        "BaseAtk": 99,
         "AtkCD": 0.5,
         "Health": 20,
         "MoveSpeed": 5,
@@ -20,7 +20,7 @@
     {
         "ID": 3,
         "Resource": "Player/3",
-        "BaseAtk": 2,
+        "BaseAtk": 3,
         "AtkCD": 0.5,
         "Health": 20,
         "MoveSpeed": 5,

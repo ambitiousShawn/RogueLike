@@ -182,6 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameter:
     health: 200
+    maxHealth: 200
     chaseSpeed: 3
     anim: {fileID: 4452833975230830612}
     player: {fileID: 0}

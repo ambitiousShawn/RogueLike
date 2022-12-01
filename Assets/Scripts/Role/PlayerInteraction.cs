@@ -74,7 +74,7 @@ public class PlayerInteraction : MonoBehaviour
         //读表赋值
         //攻击距离需要手动测量，就不好读表了
         atk1Range = 0.5f;
-        atk2Range = 0.7f;
+        atk2Range = 1f;
         atk3Range = 3f;
 
         playerInfo = DataManager.Instance.playerInfos[DataManager.Instance.role];
@@ -108,6 +108,10 @@ public class PlayerInteraction : MonoBehaviour
         {
             anim.SetBool("isDead", true);
             InputManager.Instance.SwitchState(false);
+            anim.SetBool("isCombo", false);
+            //隐藏进度条
+            LevelManager.Instance.gamePanel.SwitchBarState(false);
+            Jtrigger = false;
         }
         CoolDown();
     }
@@ -351,7 +355,8 @@ public class PlayerInteraction : MonoBehaviour
             //到达一个房间，给其剩余怪物数量赋值
             LevelManager.Instance.enemyNum = DataManager.Instance.enemyNums[currRoom.currItems];
             //更新UI
-            LevelManager.Instance.gamePanel.UpdateEnemyNum(LevelManager.Instance.enemyNum);
+            if (LevelManager.Instance.gamePanel != null)
+                LevelManager.Instance.gamePanel.UpdateEnemyNum(LevelManager.Instance.enemyNum);
             currRoom.IsArrived = true;
         }
 
@@ -430,6 +435,40 @@ public class PlayerInteraction : MonoBehaviour
                 }
                
                 
+            }
+        }
+    }
+
+    //牛仔的重击
+    public void Atk22()
+    {
+        //龙旋鞭特效生成
+        ResourcesManager.Instance.LoadAsync<GameObject>("Fire/Dragon", (obj) =>
+         {
+             obj.transform.position = transform.position + Vector3.up;
+             Destroy(obj.gameObject, 0.7f);
+         });
+        Collider2D[] coll = Physics2D.OverlapCircleAll(transform.position + Vector3.up, 2, 1 << LayerMask.NameToLayer("Enemy"));
+
+        foreach (Collider2D c in coll)
+        {
+            //Bug记录：怪物身上有两个碰撞器，需要排除不是触发器的那个，此外，子类也存在触发器，将子类图层改为非Enemy即可解决。
+            if (c.isTrigger)
+            {
+                //转换敌人的受伤状态
+                FSM fsm = c.GetComponent<FSM>();
+                FSM_Boss fsm_boss = c.GetComponent<FSM_Boss>();
+                if (fsm != null)
+                {
+                    fsm.parameter.getHit = true;
+                    //伤害值后期读表
+                    fsm.Hit(playerInfo.BaseAtk * 3);
+                }
+                else
+                {
+                    fsm_boss.parameter.getHit = true;
+                    fsm_boss.Hit(playerInfo.BaseAtk * 3);
+                }
             }
         }
     }
@@ -520,11 +559,11 @@ public class PlayerInteraction : MonoBehaviour
     }
     #endregion
 
-    /*private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, atk3Range);
-    }*/
+        Gizmos.DrawWireSphere(transform.position + Vector3.up, atk2Range);
+    }
 
 
 }

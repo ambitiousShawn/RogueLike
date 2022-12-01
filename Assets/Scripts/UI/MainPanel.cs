@@ -43,6 +43,7 @@ public class MainPanel : BasePanel
         //选择英雄按钮，切换选择英雄下选框的显示与否
         Btn_Choose.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlaySound("点击");
             if (Dropdown_ChooseHero.gameObject.activeInHierarchy)
                 Dropdown_ChooseHero.gameObject.SetActive(false);
             else
@@ -52,6 +53,7 @@ public class MainPanel : BasePanel
         //设置面板，点击弹出设置并隐藏主面板即可
         Btn_Setting.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlaySound("点击");
             UIManager.Instance.ShowPanel<SettingPanel>("SettingPanel");
             UIManager.Instance.HidePanel("MainPanel",false);
         });
@@ -59,12 +61,14 @@ public class MainPanel : BasePanel
         //TODO:关于，后期设计关于面板再添加功能
         Btn_About.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlaySound("点击");
             print("About被点击啦！");
         });
 
         //退出，直接退出即可
         Btn_Exit.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlaySound("点击");
             print("Exit被点击啦！");
             Application.Quit();
         });

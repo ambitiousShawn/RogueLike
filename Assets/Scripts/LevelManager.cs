@@ -89,6 +89,7 @@ public class LevelManager : MonoBehaviour
         //测试按键
         if (Input.GetKeyDown(KeyCode.G))
         {
+            LevelManager.Instance.gamePanel.UpdateBossBar(false);
             tipsPanel.UpdateInfo("呜呜呜呜呜", 2f);
         }
         //当设置面板存在时，游戏暂停

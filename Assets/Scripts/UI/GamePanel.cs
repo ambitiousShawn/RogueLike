@@ -24,6 +24,8 @@ public class GamePanel : BasePanel
     private Button Btn_Settings;
     //怪物剩余数量
     private Text Txt_EnemyNum;
+    //Boss血条
+    private Scrollbar Scrollbar_Boss;
 
     protected override void Init()
     {
@@ -44,6 +46,8 @@ public class GamePanel : BasePanel
         Btn_Settings = GetControl<Button>("Btn_Settings");
         Txt_EnemyNum = GetControl<Text>("Txt_EnemyNum");
 
+        Scrollbar_Boss = GetControl<Scrollbar>("Scrollbar_Boss");
+
         SwitchBarState(false);
 
         //初始化血条UI
@@ -55,6 +59,8 @@ public class GamePanel : BasePanel
         SwitchWeapon(999, 999);
         //初始化怪物剩余
         UpdateEnemyNum(0);
+        //初始化Boss血条
+        UpdateBossBar(false);
     }
 
     //开始蓄力更新进度条状态
@@ -117,5 +123,13 @@ public class GamePanel : BasePanel
     public void UpdateEnemyNum(int num)
     {
         Txt_EnemyNum.text = "当前房间剩余怪物：" + num;
+    }
+
+    //更新Boss血条UI
+    public void UpdateBossBar(bool show,float curr = 0,float max = 0)
+    {
+        Scrollbar_Boss.gameObject.SetActive(show);
+        if (show)
+            Scrollbar_Boss.size = curr / max;
     }
 }
