@@ -128,7 +128,8 @@ public class GamePanel : BasePanel
     //¸üÐÂBossÑªÌõUI
     public void UpdateBossBar(bool show,float curr = 0,float max = 0)
     {
-        Scrollbar_Boss.gameObject.SetActive(show);
+        if (Scrollbar_Boss != null)
+            Scrollbar_Boss.gameObject.SetActive(show);
         if (show)
             Scrollbar_Boss.size = curr / max;
     }

@@ -211,10 +211,10 @@ MonoBehaviour:
     maxHealth: 200
     anim: {fileID: 7792148175917404017}
     player: {fileID: 0}
-    Atk1Range: 7
+    Atk1Range: 5
     Atk2Range: 8
     baseDamage: 4
-    atkCD: 3
+    stateCD: 4
     getHit: 0
     shader: {fileID: 652497311303871964}
     currAtkCD: 0

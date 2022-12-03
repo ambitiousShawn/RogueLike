@@ -7,6 +7,7 @@ using UnityEngine;
  */
 public class Sword : FlyableFire
 {
+    private int damage = 6;
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -40,16 +41,21 @@ public class Sword : FlyableFire
             //转换敌人的受伤状态
             FSM fsm = collision.GetComponent<FSM>();
             FSM_Boss fsm_boss = collision.GetComponent<FSM_Boss>();
+            FSM_Kun fsm_kun = collision.GetComponent<FSM_Kun>();
             if (fsm != null)
             {
                 fsm.parameter.getHit = true;
                 //伤害值后期读表
-                fsm.Hit(6);
+                fsm.Hit(damage);
+            }
+            else if (fsm_boss != null)
+            {
+                fsm_boss.parameter.getHit = true;
+                fsm_boss.Hit(damage);
             }
             else
             {
-                fsm_boss.parameter.getHit = true;
-                fsm_boss.Hit(6);
+                fsm_kun.Hit(damage);
             }
         }
     }

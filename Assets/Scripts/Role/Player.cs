@@ -13,7 +13,8 @@ public class Player : MonoBehaviour
     private PlayerInfo info;
 
     //ÒÆ¶¯ÊýÖµ
-    private float speed;
+    public float speed;
+    public float baseSpeed;
 
     void Start()
     {
@@ -21,6 +22,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         info = DataManager.Instance.playerInfos[DataManager.Instance.role];
         speed = info.MoveSpeed;
+        baseSpeed = speed;
     }
 
     void FixedUpdate()

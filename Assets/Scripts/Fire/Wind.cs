@@ -49,16 +49,21 @@ public class Wind : FlyableFire
             //转换敌人的受伤状态
             FSM fsm = collision.GetComponent<FSM>();
             FSM_Boss fsm_boss = collision.GetComponent<FSM_Boss>();
+            FSM_Kun fsm_kun = collision.GetComponent<FSM_Kun>();
             if (fsm != null)
             {
                 fsm.parameter.getHit = true;
                 //伤害值后期读表
                 fsm.Hit(info.Damage);
             }
-            else
+            else if (fsm_boss != null)
             {
                 fsm_boss.parameter.getHit = true;
                 fsm_boss.Hit(info.Damage);
+            }
+            else
+            {
+                fsm_kun.Hit(info.Damage);
             }
 
             //龙卷风碰到敌人，停止运动，并且持续吸引周围的敌人

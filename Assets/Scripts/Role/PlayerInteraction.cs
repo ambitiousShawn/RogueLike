@@ -422,19 +422,24 @@ public class PlayerInteraction : MonoBehaviour
                 //转换敌人的受伤状态
                 FSM fsm = c.GetComponent<FSM>();
                 FSM_Boss fsm_boss = c.GetComponent<FSM_Boss>();
+                FSM_Kun fsm_kun = c.GetComponent<FSM_Kun>();
                 if (fsm != null)
                 {
                     fsm.parameter.getHit = true;
                     //伤害值后期读表
-                    fsm.Hit(playerInfo.BaseAtk);
+                    fsm.Hit(playerInfo.BaseAtk );
+                }
+                else if (fsm_boss != null)
+                {
+                    fsm_boss.parameter.getHit = true;
+                    fsm_boss.Hit(playerInfo.BaseAtk );
                 }
                 else
                 {
-                    fsm_boss.parameter.getHit = true;
-                    fsm_boss.Hit(playerInfo.BaseAtk);
+                    fsm_kun.Hit(playerInfo.BaseAtk );
                 }
-               
-                
+
+
             }
         }
     }
@@ -458,16 +463,21 @@ public class PlayerInteraction : MonoBehaviour
                 //转换敌人的受伤状态
                 FSM fsm = c.GetComponent<FSM>();
                 FSM_Boss fsm_boss = c.GetComponent<FSM_Boss>();
+                FSM_Kun fsm_kun = c.GetComponent<FSM_Kun>();
                 if (fsm != null)
                 {
                     fsm.parameter.getHit = true;
                     //伤害值后期读表
                     fsm.Hit(playerInfo.BaseAtk * 3);
                 }
-                else
+                else if (fsm_boss != null)
                 {
                     fsm_boss.parameter.getHit = true;
                     fsm_boss.Hit(playerInfo.BaseAtk * 3);
+                }
+                else
+                {
+                    fsm_kun.Hit(playerInfo.BaseAtk * 3);
                 }
             }
         }
@@ -485,16 +495,21 @@ public class PlayerInteraction : MonoBehaviour
                 //转换敌人的受伤状态
                 FSM fsm = c.GetComponent<FSM>();
                 FSM_Boss fsm_boss = c.GetComponent<FSM_Boss>();
+                FSM_Kun fsm_kun = c.GetComponent<FSM_Kun>();
                 if (fsm != null)
                 {
                     fsm.parameter.getHit = true;
                     //伤害值后期读表
                     fsm.Hit(playerInfo.BaseAtk * 3);
                 }
-                else
+                else if (fsm_boss != null)
                 {
                     fsm_boss.parameter.getHit = true;
                     fsm_boss.Hit(playerInfo.BaseAtk * 3);
+                }
+                else
+                {
+                    fsm_kun.Hit(playerInfo.BaseAtk * 3);
                 }
             }
         }
@@ -518,16 +533,21 @@ public class PlayerInteraction : MonoBehaviour
                 //转换敌人的受伤状态
                 FSM fsm = c.GetComponent<FSM>();
                 FSM_Boss fsm_boss = c.GetComponent<FSM_Boss>();
+                FSM_Kun fsm_kun = c.GetComponent<FSM_Kun>();
                 if (fsm != null)
                 {
                     fsm.parameter.getHit = true;
                     //伤害值后期读表
                     fsm.Hit(playerInfo.BaseAtk * 3);
                 }
-                else
+                else if (fsm_boss != null)
                 {
                     fsm_boss.parameter.getHit = true;
                     fsm_boss.Hit(playerInfo.BaseAtk * 3);
+                }
+                else
+                {
+                    fsm_kun.Hit(playerInfo.BaseAtk * 3);
                 }
             }
         }

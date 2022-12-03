@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum StateType_Kun
 {
-    Idle, Death, Wind, Fire, Ice, Water, Thunder, Rock, Grass
+    Idle, Death, Wind, Burning, Ice, Water, Thunder
 }
 
 [Serializable]
@@ -21,7 +21,7 @@ public class Parameter_Kun
     public float Atk2Range;
     public int baseDamage;
     //ÀäÈ´Ïà¹Ø
-    public float atkCD;
+    public float stateCD;
     //ÊÇ·ñ±»¹¥»÷
     public bool getHit;
     public SpriteRenderer shader;
@@ -46,7 +46,11 @@ public class FSM_Kun : MonoBehaviour
     {
         states_kun.Add(StateType_Kun.Idle, new IdleState_Kun(this));
         states_kun.Add(StateType_Kun.Death, new DeathState_Kun(this));
-
+        states_kun.Add(StateType_Kun.Thunder, new ThouderState_Kun(this));
+        states_kun.Add(StateType_Kun.Wind, new WindState_Kun(this));
+        states_kun.Add(StateType_Kun.Ice, new IceState_Kun(this));
+        states_kun.Add(StateType_Kun.Water, new WaterState_Kun(this));
+        states_kun.Add(StateType_Kun.Burning, new BurningState_Kun(this));
         //ÉèÖÃ³õÊ¼×´Ì¬ÎªIdle
         TransitionState(StateType_Kun.Idle);
     }
@@ -58,6 +62,24 @@ public class FSM_Kun : MonoBehaviour
         {
             TransitionState(StateType_Kun.Death);
         }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            TransitionState(StateType_Kun.Thunder);
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            TransitionState(StateType_Kun.Wind);
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            TransitionState(StateType_Kun.Ice);
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            TransitionState(StateType_Kun.Water);
+        }
+
+
         currState.OnUpdate();
         CoolDown();
         if (LevelManager.Instance.isArrive)
@@ -87,8 +109,8 @@ public class FSM_Kun : MonoBehaviour
     private void CoolDown()
     {
         parameter.currAtkCD += Time.deltaTime;
-        if (parameter.currAtkCD >= parameter.atkCD)
-            parameter.currAtkCD = parameter.atkCD;
+        if (parameter.currAtkCD >= parameter.stateCD)
+            parameter.currAtkCD = parameter.stateCD;
     }
 
     //×ªÒÆ×´Ì¬Âß¼­
@@ -132,7 +154,22 @@ public class FSM_Kun : MonoBehaviour
         GameObject obj = ResourcesManager.Instance.Load<GameObject>("Fire/Kun/KunDeath");
         obj.transform.position = transform.position;
         obj.transform.rotation = Quaternion.identity;
-        Destroy(obj, 1f);
+        Destroy(obj, 1.2f);
+    }
+    #endregion
+
+    #region »­ÏßÂß¼­
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, parameter.Atk1Range);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, parameter.Atk2Range);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(Vector3.up + transform.position, 2);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(Vector3.up + transform.position, 3.5f);
+
     }
     #endregion
 }
